@@ -272,14 +272,14 @@ function updateCarousel(carouselId) {
     
     if (!carousel || !track) return;
     
-    // Move the track using translateX (move by 33.333% per item to show 3 items)
-    const translateX = -carousel.currentIndex * 33.333;
+    // Move the track using translateX (move by 25% per item to show 4 items)
+    const translateX = -carousel.currentIndex * 25;
     track.style.transform = `translateX(${translateX}%)`;
     
     // Update indicator - show the leftmost visible item number
     if (indicator) {
         const leftmostVisible = carousel.currentIndex + 1;
-        const rightmostVisible = Math.min(carousel.currentIndex + 3, carousel.items.length);
+        const rightmostVisible = Math.min(carousel.currentIndex + 4, carousel.items.length);
         indicator.textContent = `${leftmostVisible}-${rightmostVisible} / ${carousel.items.length}`;
     }
 }
@@ -291,8 +291,8 @@ function navigateCarousel(carouselId, direction) {
     carousel.currentIndex += direction;
     
     // Calculate the maximum index that shows meaningful content
-    // For 3 items visible, max index is (total items - 3)
-    const maxIndex = Math.max(0, carousel.items.length - 3);
+    // For 4 items visible, max index is (total items - 4)
+    const maxIndex = Math.max(0, carousel.items.length - 4);
     
     if (carousel.currentIndex > maxIndex) {
         carousel.currentIndex = 0; // Wrap to beginning
