@@ -161,10 +161,9 @@ function createHorizontalCarousel(container, items, carouselId) {
     }
     
     // Initialize carousel data
-    const randomIndex = Math.floor(Math.random() * items.length);
     carousels[carouselId] = { 
         items: items, 
-        currentIndex: randomIndex 
+        currentIndex: 0 
     };
     
     const carouselContainer = document.createElement('div');
@@ -273,13 +272,15 @@ function updateCarousel(carouselId) {
     
     if (!carousel || !track) return;
     
-    // Move the track using translateX
-    const translateX = -carousel.currentIndex * 100;
+    // Move the track using translateX (move by 33.333% per item to show 3 items)
+    const translateX = -carousel.currentIndex * 33.333;
     track.style.transform = `translateX(${translateX}%)`;
     
-    // Update indicator
+    // Update indicator - show the leftmost visible item number
     if (indicator) {
-        indicator.textContent = `${carousel.currentIndex + 1} / ${carousel.items.length}`;
+        const leftmostVisible = carousel.currentIndex + 1;
+        const rightmostVisible = Math.min(carousel.currentIndex + 3, carousel.items.length);
+        indicator.textContent = `${leftmostVisible}-${rightmostVisible} / ${carousel.items.length}`;
     }
 }
 
@@ -289,10 +290,14 @@ function navigateCarousel(carouselId, direction) {
     
     carousel.currentIndex += direction;
     
-    if (carousel.currentIndex >= carousel.items.length) {
-        carousel.currentIndex = 0;
+    // Calculate the maximum index that shows meaningful content
+    // For 3 items visible, max index is (total items - 3)
+    const maxIndex = Math.max(0, carousel.items.length - 3);
+    
+    if (carousel.currentIndex > maxIndex) {
+        carousel.currentIndex = 0; // Wrap to beginning
     } else if (carousel.currentIndex < 0) {
-        carousel.currentIndex = carousel.items.length - 1;
+        carousel.currentIndex = maxIndex; // Wrap to end
     }
     
     updateCarousel(carouselId);
