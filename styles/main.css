@@ -27,12 +27,12 @@ body {
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1000;
+    z-index: 2000;
 }
 
-.n.location-tag {
+.location-tag {
     position: absolute;
-    bottom: 30px;
+    bottom: 145px;
     left: 50%;
     transform: translateX(-50%);
     background: linear-gradient(135deg, rgba(56, 189, 248, 0.9), rgba(37, 99, 235, 0.9));
@@ -44,7 +44,7 @@ body {
     border: 2px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(10px);
     white-space: nowrap;
-    z-index: 5;
+    z-index: 101;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
@@ -97,7 +97,7 @@ body {
     left: 0;
     width: 100%;
     height: 100vh;
-    z-index: 100;
+    z-index: 500;
     pointer-events: none;
 }
 
@@ -113,9 +113,11 @@ body {
     align-items: center;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: auto;
     padding: 30px 10px 120px 10px;
+    z-index: 510;
+    isolation: isolate;
 }
 
 .scroll-section.active {
@@ -264,6 +266,7 @@ body {
     position: relative;
     min-height: 480px;
     padding: 15px 0;
+    z-index: 200;
 }
 
 .carousel-nav {
@@ -315,6 +318,8 @@ body {
     padding: 10px;
     opacity: 1;
     overflow: visible;
+    position: relative;
+    z-index: 150;
 }
 
 .content-card {
@@ -328,7 +333,8 @@ body {
     width: 100%;
     transition: all 0.4s ease;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    z-index: 100;
 }
 
 .content-card::before {
@@ -434,7 +440,7 @@ body {
     border: 2px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(10px);
     white-space: nowrap;
-    z-index: 5;
+    z-index: 101;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
@@ -655,24 +661,6 @@ body {
 
 #companies-content .carousel-track {
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.location-tag {
-    position: absolute;
-    bottom: 145px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.9), rgba(37, 99, 235, 0.9));
-    color: white;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    white-space: nowrap;
-    z-index: 5;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .location-tag.headquarters {

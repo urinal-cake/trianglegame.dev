@@ -2,6 +2,8 @@
 let scene, camera, renderer, triangle, particles;
 const carousels = {};
 const autoScrollIntervals = {};
+let isTransitioning = false;
+let originalTriangleY = 0;
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
@@ -54,6 +56,7 @@ function initThreeJS() {
     
     triangle = new THREE.Mesh(geometry, material);
     triangle.scale.set(2, 2, 2);
+    originalTriangleY = triangle.position.y; // Store original position
     scene.add(triangle);
     
     // Create particles
@@ -313,16 +316,78 @@ function setupNavigation() {
     
     navButtons.forEach((button) => {
         button.addEventListener('click', () => {
+            if (isTransitioning) return; // Prevent multiple clicks during transition
+            
             const sectionIndex = parseInt(button.getAttribute('data-section'));
             
-            // Update active button
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+            // Start transition
+            isTransitioning = true;
             
-            // Update active section
-            sections.forEach(section => section.classList.remove('active'));
-            if (sections[sectionIndex]) {
-                sections[sectionIndex].classList.add('active');
+            // Move pyramid off-screen quickly
+            if (triangle) {
+                // Animate pyramid up and off-screen
+                const startY = triangle.position.y;
+                const targetY = 15; // Move way up off-screen
+                const duration = 300; // 300ms to move off-screen
+                const startTime = Date.now();
+                
+                function animatePyramidOut() {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOut = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+                    
+                    triangle.position.y = startY + (targetY - startY) * easeOut;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animatePyramidOut);
+                    } else {
+                        // Pyramid is off-screen, now switch sections
+                        switchSections();
+                    }
+                }
+                animatePyramidOut();
+            } else {
+                switchSections();
+            }
+            
+            function switchSections() {
+                // Update active button
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Update active section
+                sections.forEach(section => section.classList.remove('active'));
+                if (sections[sectionIndex]) {
+                    sections[sectionIndex].classList.add('active');
+                }
+                
+                // Wait a moment, then bring pyramid back from bottom
+                setTimeout(() => {
+                    if (triangle) {
+                        // Start pyramid from bottom of screen
+                        triangle.position.y = -15;
+                        const targetY = originalTriangleY;
+                        const duration = 600; // 600ms to come back in
+                        const startTime = Date.now();
+                        
+                        function animatePyramidIn() {
+                            const elapsed = Date.now() - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            const easeOut = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+                            
+                            triangle.position.y = -15 + (targetY + 15) * easeOut;
+                            
+                            if (progress < 1) {
+                                requestAnimationFrame(animatePyramidIn);
+                            } else {
+                                isTransitioning = false; // Transition complete
+                            }
+                        }
+                        animatePyramidIn();
+                    } else {
+                        isTransitioning = false;
+                    }
+                }, 100); // Small delay before bringing it back
             }
         });
     });
