@@ -354,10 +354,25 @@ body {
 }
 
 .content-card:hover {
-    transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Company card specific hover effect */
+.company-card.content-card:hover {
+    transform: none;
+    background: rgba(56, 189, 248, 0.15);
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+
+/* Group card specific hover effect */  
+.group-card.content-card:hover {
+    transform: none;
+    background: rgba(168, 85, 247, 0.15);
+    border-color: rgba(168, 85, 247, 0.4);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
 }
 
 /* Card Link Styles */
@@ -371,59 +386,6 @@ body {
     width: 100%;
     height: 100%;
     cursor: pointer;
-    position: relative;
-}
-
-.card-link:hover {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* Company card specific hover effect */
-.company-card:hover {
-    transform: none; /* Don't move the card */
-    background: rgba(56, 189, 248, 0.15);
-    border-color: rgba(56, 189, 248, 0.4);
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
-    transition: all 0.3s ease;
-}
-
-/* Override hover for company card links */
-.card-link:has(.company-card):hover .company-card {
-    transform: none;
-}
-
-/* Group Card Styles */
-.group-card {
-    padding: 20px !important;
-    height: 280px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important;
-    align-items: flex-start !important;
-    text-align: left !important;
-}
-
-.group-card h3 {
-    font-size: 1.4rem !important;
-    margin-bottom: 15px !important;
-    line-height: 1.3;
-}
-
-.group-card p {
-    font-size: 0.95rem !important;
-    line-height: 1.5 !important;
-    margin-bottom: 15px !important;
-    color: rgba(255, 255, 255, 0.85) !important;
-}
-
-/* Group card specific hover effect */
-.group-card:hover {
-    transform: none; /* Don't move the card */
-    background: rgba(168, 85, 247, 0.15);
-    border-color: rgba(168, 85, 247, 0.4);
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
-    transition: all 0.3s ease;
 }
 
 .group-type-tag {
