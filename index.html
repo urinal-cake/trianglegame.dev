@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triangle Game Development</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div id="scene-container"></div>
+    
+    <nav class="floating-nav">
+        <div class="nav-content">
+            <button class="nav-btn active" data-section="0">Events</button>
+            <button class="nav-btn" data-section="1">Groups</button>
+            <button class="nav-btn" data-section="2">Companies</button>
+        </div>
+    </nav>
+
+    <main class="sections-container">
+        <section id="intro" class="scroll-section active">
+            <div class="intro-content">
+                <h1>NC Triangle Game Development</h1>
+                <p>Connecting game developers in the Raleigh, Durham, Chapel Hill area.</p>
+            </div>
+        </section>
+
+        <section id="events" class="scroll-section">
+            <h2>Upcoming Events</h2>
+            <div id="events-content">
+                <!-- Events will be populated here -->
+            </div>
+        </section>
+
+        <section id="groups" class="scroll-section">
+            <h2>Groups & Meetups</h2>
+            <div id="groups-content">
+                <!-- Groups will be populated here -->
+            </div>
+        </section>
+
+        <section id="companies" class="scroll-section">
+            <h2>Game Companies</h2>
+            <div id="companies-content">
+                <!-- Companies will be populated here -->
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/geometries/TextGeometry.js"></script>
+    <script src="scripts/data.js"></script>
+    <script src="scripts/scroll3d-clean.js"></script>
+</body>
+</html>
