@@ -23,65 +23,72 @@ const events = [
     }
 ];
 
-// Companies with physical presence in Triangle area
-const companiesWithPhysicalPresence = [
+// Companies with presence in Triangle area
+const companies = [
     {
         name: "Epic Games",
-        description: "Creator of Fortnite and Unreal Engine, headquartered in Cary, NC.",
+        logo: "https://cdn.epicgames.com/static/favicon.ico",
+        locationType: "Headquarters",
         url: "https://www.epicgames.com"
     },
     {
         name: "Red Storm Entertainment",
-        description: "Ubisoft subsidiary known for tactical shooters, based in Cary, NC.",
+        logo: "https://www.ubisoft.com/favicon.ico",
+        locationType: "Office",
         url: "https://www.redstorm.com"
     },
     {
         name: "Insomniac Games",
-        description: "PlayStation studio with Triangle area presence, known for Spider-Man and Ratchet & Clank.",
+        logo: "https://insomniac.games/favicon.ico",
+        locationType: "Office",
         url: "https://insomniac.games"
     },
     {
         name: "Boss Fight Entertainment",
-        description: "Mobile game developer creating engaging social experiences.",
+        logo: "https://www.bossfight.co/favicon.ico",
+        locationType: "Office",
         url: "https://www.bossfight.co"
     },
     {
         name: "Virtual Heroes",
-        description: "Serious games and training simulations company in Raleigh.",
+        logo: "https://www.virtualheroes.com/favicon.ico",
+        locationType: "Office",
         url: "https://www.virtualheroes.com"
     },
     {
         name: "Mighty Rabbit Studios",
-        description: "Independent game studio focusing on mobile and PC games.",
+        logo: "https://www.mightyrabbit.com/favicon.ico",
+        locationType: "Office",
         url: "https://www.mightyrabbit.com"
-    }
-];
-
-// Companies with remote presence but connections to Triangle area
-const companiesWithRemotePresence = [
+    },
     {
         name: "Unity Technologies",
-        description: "Game engine company with remote developers in the Triangle area.",
+        logo: "https://unity.com/favicon.ico",
+        locationType: "Remote Staff",
         url: "https://unity.com"
     },
     {
         name: "Niantic",
-        description: "AR game company behind Pokémon GO, with remote Triangle developers.",
+        logo: "https://nianticlabs.com/favicon.ico",
+        locationType: "Remote Staff",
         url: "https://nianticlabs.com"
     },
     {
         name: "Riot Games",
-        description: "Creator of League of Legends, with remote employees in NC.",
+        logo: "https://www.riotgames.com/favicon.ico",
+        locationType: "Remote Staff",
         url: "https://www.riotgames.com"
     },
     {
         name: "2K Games",
-        description: "Publishing house with distributed teams including Triangle area.",
+        logo: "https://2k.com/favicon.ico",
+        locationType: "Remote Staff",
         url: "https://2k.com"
     },
     {
         name: "Blizzard Entertainment",
-        description: "Activision Blizzard studio with remote Triangle area talent.",
+        logo: "https://www.blizzard.com/favicon.ico",
+        locationType: "Remote Staff",
         url: "https://www.blizzard.com"
     }
 ];

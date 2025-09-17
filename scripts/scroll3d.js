@@ -99,9 +99,8 @@ function populateContent() {
     
     // Populate companies
     const companiesContent = document.getElementById('companies-content');
-    if (companiesContent && typeof companiesWithPhysicalPresence !== 'undefined' && typeof companiesWithRemotePresence !== 'undefined') {
-        const allCompanies = [...companiesWithPhysicalPresence, ...companiesWithRemotePresence];
-        createHorizontalCarousel(companiesContent, allCompanies, 'companies');
+    if (companiesContent && typeof companies !== 'undefined') {
+        createHorizontalCarousel(companiesContent, companies, 'companies');
     }
 }
 
@@ -238,23 +237,29 @@ function createCarouselItems(carouselId) {
         let content = '';
         if (carouselId === 'companies') {
             content = `
-                <div class="content-card">
-                    <h3>${item.name}</h3>
-                    <p>${item.description}</p>
-                    <a href="${item.url}" target="_blank">Visit Website →</a>
-                </div>
+                <a href="${item.url}" target="_blank" class="card-link">
+                    <div class="content-card company-card">
+                        <div class="company-logo">
+                            <img src="${item.logo}" alt="${item.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="logo-fallback" style="display:none;">${item.name.charAt(0)}</div>
+                        </div>
+                        <h3>${item.name}</h3>
+                    </div>
+                    <div class="location-tag ${item.locationType.toLowerCase().replace(' ', '-')}">${item.locationType}</div>
+                </a>
             `;
         } else if (carouselId === 'groups') {
             content = `
-                <div class="content-card">
-                    <h3>${item.name}</h3>
-                    <p>${item.description}</p>
-                    <div class="meta-info">
-                        <span>📍 ${item.location}</span>
-                        <span>🏷️ ${item.type}</span>
+                <a href="${item.url}" target="_blank" class="card-link">
+                    <div class="content-card">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                        <div class="meta-info">
+                            <span>📍 ${item.location}</span>
+                            <span>🏷️ ${item.type}</span>
+                        </div>
                     </div>
-                    ${item.url ? `<a href="${item.url}" target="_blank">Learn More →</a>` : ''}
-                </div>
+                </a>
             `;
         }
         
@@ -272,14 +277,18 @@ function updateCarousel(carouselId) {
     
     if (!carousel || !track) return;
     
-    // Move the track using translateX (move by 25% per item to show 4 items)
-    const translateX = -carousel.currentIndex * 25;
+    // Determine items per view and percentage per item based on carousel type
+    const itemsPerView = carouselId === 'companies' ? 5 : 4;
+    const percentagePerItem = carouselId === 'companies' ? 20 : 25;
+    
+    // Move the track using translateX
+    const translateX = -carousel.currentIndex * percentagePerItem;
     track.style.transform = `translateX(${translateX}%)`;
     
     // Update indicator - show the leftmost visible item number
     if (indicator) {
         const leftmostVisible = carousel.currentIndex + 1;
-        const rightmostVisible = Math.min(carousel.currentIndex + 4, carousel.items.length);
+        const rightmostVisible = Math.min(carousel.currentIndex + itemsPerView, carousel.items.length);
         indicator.textContent = `${leftmostVisible}-${rightmostVisible} / ${carousel.items.length}`;
     }
 }
@@ -290,9 +299,9 @@ function navigateCarousel(carouselId, direction) {
     
     carousel.currentIndex += direction;
     
-    // Calculate the maximum index that shows meaningful content
-    // For 4 items visible, max index is (total items - 4)
-    const maxIndex = Math.max(0, carousel.items.length - 4);
+    // Calculate the maximum index based on carousel type
+    const itemsPerView = carouselId === 'companies' ? 5 : 4;
+    const maxIndex = Math.max(0, carousel.items.length - itemsPerView);
     
     if (carousel.currentIndex > maxIndex) {
         carousel.currentIndex = 0; // Wrap to beginning
