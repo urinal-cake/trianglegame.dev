@@ -220,17 +220,19 @@ body {
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
 }
 
-.event-card.next-event {
-    border: 2px solid rgba(251, 191, 36, 0.5);
-    background: rgba(251, 191, 36, 0.1);
-    box-shadow: 0 0 40px rgba(251, 191, 36, 0.3);
-}
-
 .event-card h3 {
     color: #38bdf8;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
     font-size: 1.4rem;
     font-weight: 700;
+}
+
+.event-organizer {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    font-style: italic;
+    margin-bottom: 20px;
+    font-weight: 400;
 }
 
 .event-meta {
@@ -349,7 +351,7 @@ body {
     transform: translateY(-10px);
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* Card Link Styles */
@@ -376,13 +378,64 @@ body {
     transform: none; /* Don't move the card */
     background: rgba(56, 189, 248, 0.15);
     border-color: rgba(56, 189, 248, 0.4);
-    box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
     transition: all 0.3s ease;
 }
 
 /* Override hover for company card links */
 .card-link:has(.company-card):hover .company-card {
     transform: none;
+}
+
+/* Group Card Styles */
+.group-card {
+    padding: 20px !important;
+    height: 280px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+}
+
+.group-card h3 {
+    font-size: 1.4rem !important;
+    margin-bottom: 15px !important;
+    line-height: 1.3;
+}
+
+.group-card p {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 15px !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Group card specific hover effect */
+.group-card:hover {
+    transform: none; /* Don't move the card */
+    background: rgba(168, 85, 247, 0.15);
+    border-color: rgba(168, 85, 247, 0.4);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+    transition: all 0.3s ease;
+}
+
+.group-type-tag {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.9), rgba(147, 51, 234, 0.9));
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    white-space: nowrap;
+    z-index: 5;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .content-card h3 {

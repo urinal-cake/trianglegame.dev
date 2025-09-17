@@ -2,6 +2,7 @@
 const events = [
     {
         name: "Triangle Game Developers Meetup",
+        organizer: "Triangle Game Developers",
         date: "2025-10-15",
         time: "6:00 PM",
         location: "American Underground, Durham",
@@ -9,6 +10,7 @@ const events = [
     },
     {
         name: "Indie Game Showcase",
+        organizer: "NC Game Development Association",
         date: "2025-11-20",
         time: "7:00 PM",
         location: "Red Hat Amphitheater, Raleigh",
@@ -16,6 +18,7 @@ const events = [
     },
     {
         name: "Game Jam Weekend",
+        organizer: "NC State Game Development Club",
         date: "2025-12-05",
         time: "9:00 AM",
         location: "NC State University, Raleigh",

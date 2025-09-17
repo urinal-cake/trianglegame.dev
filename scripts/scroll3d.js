@@ -108,26 +108,9 @@ function createEventsGrid(container) {
     const grid = document.createElement('div');
     grid.className = 'events-grid';
     
-    // Find the next upcoming event
-    const now = new Date();
-    let nextEventIndex = -1;
-    let closestDate = null;
-    
-    events.forEach((event, index) => {
-        const eventDate = new Date(event.date);
-        if (eventDate >= now && (!closestDate || eventDate < closestDate)) {
-            closestDate = eventDate;
-            nextEventIndex = index;
-        }
-    });
-    
     events.forEach((event, index) => {
         const eventCard = document.createElement('div');
         eventCard.className = 'event-card';
-        
-        if (index === nextEventIndex) {
-            eventCard.classList.add('next-event');
-        }
         
         const eventDate = new Date(event.date);
         const formattedDate = eventDate.toLocaleDateString('en-US', {
@@ -139,6 +122,7 @@ function createEventsGrid(container) {
         
         eventCard.innerHTML = `
             <h3>${event.name}</h3>
+            <div class="event-organizer">Hosted by ${event.organizer}</div>
             <div class="event-meta">
                 <span>📅 ${formattedDate}</span>
                 <span>🕐 ${event.time}</span>
@@ -251,14 +235,11 @@ function createCarouselItems(carouselId) {
         } else if (carouselId === 'groups') {
             content = `
                 <a href="${item.url}" target="_blank" class="card-link">
-                    <div class="content-card">
+                    <div class="content-card group-card">
                         <h3>${item.name}</h3>
                         <p>${item.description}</p>
-                        <div class="meta-info">
-                            <span>📍 ${item.location}</span>
-                            <span>🏷️ ${item.type}</span>
-                        </div>
                     </div>
+                    <div class="group-type-tag">${item.type}</div>
                 </a>
             `;
         }
