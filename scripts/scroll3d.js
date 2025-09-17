@@ -319,16 +319,18 @@ function setupNavigation() {
     const navButtons = document.querySelectorAll('.nav-btn');
     const sections = document.querySelectorAll('.scroll-section');
     
-    navButtons.forEach((button, index) => {
+    navButtons.forEach((button) => {
         button.addEventListener('click', () => {
+            const sectionIndex = parseInt(button.getAttribute('data-section'));
+            
             // Update active button
             navButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
             
             // Update active section
             sections.forEach(section => section.classList.remove('active'));
-            if (sections[index]) {
-                sections[index].classList.add('active');
+            if (sections[sectionIndex]) {
+                sections[sectionIndex].classList.add('active');
             }
         });
     });
