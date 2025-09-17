@@ -97,7 +97,7 @@ body {
     visibility: hidden;
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: auto;
-    padding: 50px 20px 120px 20px;
+    padding: 30px 10px 120px 10px;
 }
 
 .scroll-section.active {
@@ -239,8 +239,8 @@ body {
 .carousel-container {
     display: flex;
     align-items: center;
-    gap: 30px;
-    margin: 40px 0;
+    gap: 10px;
+    margin: 20px 0;
     position: relative;
     min-height: 450px;
     padding: 15px 0;
@@ -251,10 +251,10 @@ body {
     backdrop-filter: blur(20px);
     border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     color: white;
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
@@ -292,7 +292,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 10px;
     opacity: 1;
 }
 
@@ -301,7 +301,7 @@ body {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
-    padding: 40px;
+    padding: 25px;
     text-align: center;
     max-width: 600px;
     width: 100%;
