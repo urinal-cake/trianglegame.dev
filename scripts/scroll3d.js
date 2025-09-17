@@ -224,8 +224,12 @@ function createCarouselItems(carouselId) {
         return;
     }
     
-    // Clear existing content
+    // Clear existing content and create track
     carouselElement.innerHTML = '';
+    
+    const track = document.createElement('div');
+    track.className = 'carousel-track';
+    track.id = `track-${carouselId}`;
     
     carousel.items.forEach((item, index) => {
         const itemElement = document.createElement('div');
@@ -256,29 +260,22 @@ function createCarouselItems(carouselId) {
         }
         
         itemElement.innerHTML = content;
-        carouselElement.appendChild(itemElement);
+        track.appendChild(itemElement);
     });
+    
+    carouselElement.appendChild(track);
 }
 
 function updateCarousel(carouselId) {
     const carousel = carousels[carouselId];
     const indicator = document.getElementById(`indicator-${carouselId}`);
+    const track = document.getElementById(`track-${carouselId}`);
     
-    if (!carousel) return;
+    if (!carousel || !track) return;
     
-    // Update all items
-    carousel.items.forEach((item, index) => {
-        const itemElement = document.getElementById(`item-${carouselId}-${index}`);
-        if (!itemElement) return;
-        
-        itemElement.classList.remove('center', 'side', 'far');
-        
-        if (index === carousel.currentIndex) {
-            itemElement.classList.add('center');
-        } else {
-            itemElement.classList.add('far');
-        }
-    });
+    // Move the track using translateX
+    const translateX = -carousel.currentIndex * 100;
+    track.style.transform = `translateX(${translateX}%)`;
     
     // Update indicator
     if (indicator) {
