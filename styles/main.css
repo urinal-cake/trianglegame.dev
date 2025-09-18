@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400&display=swap');
 
 * {
     margin: 0;
@@ -32,14 +34,10 @@ body {
     z-index: 2000;
 }
 
-/* Unified tag system - base styles shared by all tags */
+/* Unified tag system - now positioned at bottom of cards using flexbox */
 .location-tag,
 .group-type-tag,
 .school-type-tag {
-    position: absolute;
-    bottom: 90px;
-    left: 50%;
-    transform: translateX(-50%);
     color: white;
     padding: 6px 16px;
     border-radius: 20px;
@@ -48,21 +46,9 @@ body {
     border: 2px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(10px);
     white-space: nowrap;
-    z-index: 101;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.location-tag {
-    bottom: 100px;
-}
-
-.school-type-tag {
-    bottom: 100px;
-}
-
-/* Company location tag specific positioning */
-.location-tag {
-    bottom: 145px;
+    margin-top: auto; /* Push to bottom of flex container */
+    align-self: center; /* Center horizontally */
 }
 
 /* Group type tag styling */
@@ -482,7 +468,7 @@ body.motion-off .scroll-section {
 }
 
 .carousel-item {
-    min-width: 25%;
+    min-width: 25%; /* Default: 4 items per page (Events, Schools) */
     min-height: 450px;
     display: flex;
     align-items: center;
@@ -507,6 +493,9 @@ body.motion-off .scroll-section {
     position: relative;
     overflow: hidden; /* ensure ::before top bar stays inside rounded corners */
     z-index: 100;
+    display: flex;
+    flex-direction: column;
+    min-height: 380px; /* Ensure consistent minimum height */
 }
 
 .content-card::before {
@@ -579,11 +568,45 @@ body.motion-off .scroll-section {
     font-weight: 700;
 }
 
+/* Special styling for Triangle Area Supper Club logo text */
+.content-card h3.tasc-logo {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1.2;
+    text-align: center;
+    background: linear-gradient(0deg, #f4f4f8 0%, #d4a437 95%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Special styling for Triangle Interactive Arts Collective logo text */
+.content-card h3.tiac-logo {
+    font-family: "Oswald", sans-serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: 20px;
+    overflow-wrap: break-word;
+    display: inline;
+}
+
 .content-card p {
     line-height: 1.7;
     margin-bottom: 20px;
     color: rgba(255, 255, 255, 0.9);
     font-size: 1.1rem;
+    flex-grow: 1; /* Take up available space above the tag */
 }
 
 .content-card a {
@@ -632,7 +655,7 @@ body.motion-off .scroll-section {
 
 .carousel-indicator {
     position: absolute;
-    bottom: 20px;
+    bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.6);
@@ -796,7 +819,7 @@ body.motion-off .scroll-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
     padding: 25px 15px;
     margin-bottom: 20px;
@@ -814,6 +837,20 @@ body.motion-off .scroll-section {
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* Group logo styling - similar to company logo but with adjustments for groups */
+.group-logo {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: transparent; /* Transparent background to remove white border */
+    border: none; /* Remove border completely */
+    align-self: center;
+}
+
 .company-logo img {
     width: 45px;
     height: 45px;
@@ -821,10 +858,24 @@ body.motion-off .scroll-section {
     border-radius: 8px;
 }
 
+.group-logo img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: none; /* Remove image border completely */
+}
+
 .logo-fallback {
     font-size: 24px;
     font-weight: bold;
     color: rgba(56, 189, 248, 0.8);
+}
+
+.group-logo .logo-fallback {
+    font-size: 24px;
+    font-weight: bold;
+    color: rgba(168, 85, 247, 0.8); /* Purple theme for groups */
 }
 
 .content-card.company-card h3 {
@@ -836,5 +887,11 @@ body.motion-off .scroll-section {
 /* Company carousel specific styling */
 #companies-content .carousel-item {
     min-width: 20%;
+    position: relative;
+}
+
+/* Groups carousel specific styling - 3 items per page for more space */
+#groups-content .carousel-item {
+    min-width: 33.333%;
     position: relative;
 }

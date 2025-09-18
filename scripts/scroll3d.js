@@ -276,18 +276,34 @@ function createCarouselItems(carouselId) {
                             <div class="logo-fallback" style="display:none;">${item.name.charAt(0)}</div>
                         </div>
                         <h3>${item.name}</h3>
+                        <div class="location-tag ${item.locationType.toLowerCase().replace(' ', '-')}">${item.locationType}</div>
                     </div>
-                    <div class="location-tag ${item.locationType.toLowerCase().replace(' ', '-')}">${item.locationType}</div>
                 </a>
             `;
         } else if (carouselId === 'groups') {
+            // Special handling for Triangle Area Supper Club and Triangle Interactive Arts Collective
+            const isTASC = item.name === "TASC";
+            const isTIAC = item.name === "Triangle Interactive";
+            let titleClass = "";
+            if (isTASC) titleClass = "tasc-logo";
+            if (isTIAC) titleClass = "tiac-logo";
+            
+            // Check if group has a logo
+            const logoHtml = item.logo ? `
+                <div class="group-logo">
+                    <img src="${item.logo}" alt="${item.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="logo-fallback" style="display:none;">${item.name.charAt(0)}</div>
+                </div>
+            ` : '';
+            
             content = `
                 <a href="${item.url}" target="_blank" class="card-link" aria-label="${item.name} - ${item.type}">
                     <div class="content-card group-card">
-                        <h3>${item.name}</h3>
+                        ${logoHtml}
+                        <h3 class="${titleClass}">${item.name}</h3>
                         <p>${item.description}</p>
+                        <div class="group-type-tag">${item.type}</div>
                     </div>
-                    <div class="group-type-tag">${item.type}</div>
                 </a>
             `;
         } else if (carouselId === 'schools') {
@@ -296,8 +312,8 @@ function createCarouselItems(carouselId) {
                     <div class="content-card group-card">
                         <h3>${item.name}</h3>
                         <p>${item.description}</p>
+                        <div class="school-type-tag">${item.type}</div>
                     </div>
-                    <div class="school-type-tag">${item.type}</div>
                 </a>
             `;
         }

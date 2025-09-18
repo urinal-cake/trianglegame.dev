@@ -1,5 +1,24 @@
-// Events data
-const events = [
+// Utility function to shuffle array randomly
+function shuffleArray(array) {
+    const shuffled = [...array]; // Create a copy to avoid mutating original
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
+// Utility function to sort events by date (most recent first)
+function sortEventsByDate(events) {
+    return [...events].sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateA - dateB; // Ascending order (earliest first)
+    });
+}
+
+// Events data - will be sorted by date
+const eventsData = [
     {
         name: "Lorem Ipsum Developer Meetup",
         organizer: "Lorem Ipsum Game Developers",
@@ -29,8 +48,8 @@ const events = [
     }
 ];
 
-// Companies with presence in Triangle area
-const companies = [
+// Companies with presence in Triangle area - will be randomized
+const companiesData = [
     {
         name: "Epic Games",
         logo: "https://cdn.epicgames.com/static/favicon.ico",
@@ -99,54 +118,36 @@ const companies = [
     }
 ];
 
-// Groups and meetups
-const groups = [
+// Groups and meetups - will be randomized
+const groupsData = [
     {
-        name: "Triangle Area Supper Club (TASC)",
-        description: "A supper club for senior leaders and executives of game development in the Triangle area.",
+        name: "TASC",
+        description: "The Triangle Area Supper Club (TASC) is an invite-only gathering for executives and senior leadership. Its mission is to foster authentic dialogue, reflection, and connection over a shared table.",
         location: "Triangle Area",
         type: "Executive Network",
-        url: "https://tasc.games"
+        url: "https://tasc.games",
+        logo: "images/groups/tasc.svg"
     },
     {
-        name: "Lorem Ipsum Developers",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit in Triangle area.",
-        location: "Various locations",
-        type: "Meetup Group",
-        url: "https://www.example.com/lorem"
+        name: "Triangle Interactive",
+        description: "The Triangle Interactive Arts Collective (TIAC) is a nonprofit creating a supportive community for local game developers. The TIAC hosts events, and runs a shared office space for game creators.",
+        location: "Central North Carolina",
+        type: "Nonprofit Organization",
+        url: "https://triangleinteractivearts.org",
+        logo: "images/groups/tiac.png"
     },
     {
-        name: "Consectetur Development Association",
-        description: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        location: "Statewide",
-        type: "Professional Association",
-        url: "https://www.example.com/consectetur"
-    },
-    {
-        name: "People in Lorem Ipsum",
-        description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-        location: "Triangle Area",
-        type: "Community Group",
-        url: "https://www.example.com/women-lorem"
-    },
-    {
-        name: "Triangle Lorem/Ipsum Meetup",
-        description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.",
-        location: "Raleigh-Durham",
-        type: "Technology Meetup",
-        url: "https://www.example.com/triangle-lorem"
-    },
-    {
-        name: "Lorem University Club",
-        description: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
-        location: "Lorem Campus",
-        type: "Student Organization",
-        url: "https://www.example.com/lorem-university"
+        name: "Raleigh Unreal Engine Meetup",
+        description: "In Epic Games' own backyard, the Raleigh Unreal Engine Developers group connects local developers through casual gatherings, workshops and event participation. All are welcome!",
+        location: "Raleigh",
+        type: "Developer Meetup",
+        url: "https://communities.unrealengine.com/raleigh/",
+        logo: "images/groups/RaleighUnrealMeetup.png"
     }
 ];
 
-// Schools and university programs
-const schools = [
+// Schools and university programs - will be randomized
+const schoolsData = [
     {
         name: "Wake Technical Community College – Simulation and Game Design",
         description: "Associate degree program focusing on game design, programming, and interactive media development.",
@@ -155,3 +156,9 @@ const schools = [
         url: "https://www.waketech.edu/programs-courses/credit/simulation-game-design"
     }
 ];
+
+// Generate randomized/sorted data for page load
+const events = sortEventsByDate(eventsData);
+const companies = shuffleArray(companiesData);
+const groups = shuffleArray(groupsData);
+const schools = shuffleArray(schoolsData);
