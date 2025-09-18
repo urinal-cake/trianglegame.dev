@@ -22,9 +22,9 @@ body {
     z-index: 1;
 }
 
-.floating-nav {
+.top-nav {
     position: fixed;
-    bottom: 30px;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2000;
@@ -130,6 +130,31 @@ body {
     border-color: rgba(56, 189, 248, 0.35);
     background: rgba(255, 255, 255, 0.10);
     box-shadow: none;
+}
+
+.site-footer {
+    position: fixed;
+    bottom: 8px;
+    right: 12px;
+    z-index: 2001;
+}
+
+.footer-credit {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    pointer-events: auto;
+}
+
+.credit-link {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.credit-link:hover {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .sections-container {
@@ -314,6 +339,37 @@ body.motion-off .scroll-section {
     margin-bottom: 8px;
     font-size: 1.4rem;
     font-weight: 700;
+}
+
+.event-title-link {
+    color: #38bdf8;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.event-title-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #38bdf8;
+    transition: width 0.3s ease;
+}
+
+.event-title-link:hover {
+    color: #0ea5e9;
+}
+
+.event-title-link:hover::after {
+    width: 100%;
+}
+
+.event-card:hover {
+    cursor: pointer;
 }
 
 .event-organizer {
@@ -584,11 +640,22 @@ body.motion-off .scroll-section {
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
+    /* Disable animations and most transitions, but preserve essential UI transitions */
     * {
         animation: none !important;
-        transition: none !important;
         scroll-behavior: auto !important;
     }
+    
+    /* Disable transitions on most elements except carousel navigation */
+    *:not(.carousel-track) {
+        transition: none !important;
+    }
+    
+    /* Preserve carousel scrolling transition for usability */
+    .carousel-track {
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
     .event-card:hover,
     .nav-btn:hover,
     .carousel-nav:hover,
@@ -609,8 +676,8 @@ body.motion-off .scroll-section {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-    .floating-nav {
-        bottom: 30px;
+    .top-nav {
+        top: 15px;
         left: 50%;
         transform: translateX(-50%);
     }

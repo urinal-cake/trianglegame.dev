@@ -136,7 +136,7 @@ function createEventsGrid(container) {
         });
         
         eventCard.innerHTML = `
-            <h3>${event.name}</h3>
+            <h3><a href="${event.url}" target="_blank" class="event-title-link">${event.name}</a></h3>
             <div class="event-organizer">Hosted by ${event.organizer}</div>
             <div class="event-meta">
                 <span>📅 ${formattedDate}</span>

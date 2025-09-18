@@ -6,7 +6,8 @@ const events = [
         date: "2025-10-15",
         time: "6:00 PM",
         location: "Lorem Building, Durham",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        url: "https://www.example.com/lorem-meetup"
     },
     {
         name: "Consectetur Adipiscing Showcase",
@@ -14,7 +15,8 @@ const events = [
         date: "2025-11-20",
         time: "7:00 PM",
         location: "Ipsum Center, Raleigh",
-        description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        url: "https://www.example.com/consectetur-showcase"
     },
     {
         name: "Dolor Sit Amet Weekend",
@@ -22,7 +24,8 @@ const events = [
         date: "2025-12-05",
         time: "9:00 AM",
         location: "Lorem University, Raleigh",
-        description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+        description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        url: "https://www.example.com/dolor-weekend"
     }
 ];
 
