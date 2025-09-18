@@ -4,6 +4,9 @@ const carousels = {};
 const autoScrollIntervals = {};
 let isTransitioning = false;
 let originalTriangleY = 0;
+// motionOverride: 'on' | 'off' (default On)
+let motionOverride = 'on';
+let currentSectionIndex = 0; // 0=intro, 1=events, 2=groups, 3=companies
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
@@ -17,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Setup navigation
     setupNavigation();
+
+    // Setup motion toggle
+    setupMotionToggle();
     
     // Start animation loop
     animate();
@@ -100,6 +106,12 @@ function populateContent() {
         createHorizontalCarousel(groupsContent, groups, 'groups');
     }
     
+    // Populate schools
+    const schoolsContent = document.getElementById('schools-content');
+    if (schoolsContent && typeof schools !== 'undefined') {
+        createHorizontalCarousel(schoolsContent, schools, 'schools');
+    }
+
     // Populate companies
     const companiesContent = document.getElementById('companies-content');
     if (companiesContent && typeof companies !== 'undefined') {
@@ -158,6 +170,7 @@ function createHorizontalCarousel(container, items, carouselId) {
     // Left arrow
     const leftArrow = document.createElement('button');
     leftArrow.className = 'carousel-nav';
+    leftArrow.setAttribute('aria-label', 'Previous');
     leftArrow.innerHTML = '←';
     leftArrow.onclick = () => {
         stopAutoScroll(carouselId);
@@ -169,10 +182,15 @@ function createHorizontalCarousel(container, items, carouselId) {
     const horizontalCarousel = document.createElement('div');
     horizontalCarousel.className = 'horizontal-carousel';
     horizontalCarousel.id = `carousel-${carouselId}`;
+    horizontalCarousel.setAttribute('role', 'region');
+    horizontalCarousel.setAttribute('aria-roledescription', 'carousel');
+    horizontalCarousel.setAttribute('aria-label', `${carouselId} carousel`);
+    horizontalCarousel.setAttribute('tabindex', '0');
     
     // Right arrow
     const rightArrow = document.createElement('button');
     rightArrow.className = 'carousel-nav';
+    rightArrow.setAttribute('aria-label', 'Next');
     rightArrow.innerHTML = '→';
     rightArrow.onclick = () => {
         stopAutoScroll(carouselId);
@@ -184,6 +202,7 @@ function createHorizontalCarousel(container, items, carouselId) {
     const indicator = document.createElement('div');
     indicator.className = 'carousel-indicator';
     indicator.id = `indicator-${carouselId}`;
+    indicator.setAttribute('aria-live', 'polite');
     
     carouselContainer.appendChild(leftArrow);
     carouselContainer.appendChild(horizontalCarousel);
@@ -197,7 +216,32 @@ function createHorizontalCarousel(container, items, carouselId) {
     
     // Initialize display and auto-scroll
     updateCarousel(carouselId);
-    startAutoScroll(carouselId);
+    if (shouldAnimate()) {
+        startAutoScroll(carouselId);
+    }
+
+    // Pause auto-scroll when interacting with carousel
+    carouselContainer.addEventListener('mouseenter', () => stopAutoScroll(carouselId));
+    carouselContainer.addEventListener('mouseleave', () => {
+        if (shouldAnimate()) startAutoScroll(carouselId);
+    });
+    carouselContainer.addEventListener('focusin', () => stopAutoScroll(carouselId));
+    carouselContainer.addEventListener('focusout', () => {
+        if (shouldAnimate()) startAutoScroll(carouselId);
+    });
+
+    // Keyboard navigation for carousel region
+    horizontalCarousel.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            stopAutoScroll(carouselId);
+            navigateCarousel(carouselId, -1);
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            stopAutoScroll(carouselId);
+            navigateCarousel(carouselId, 1);
+        }
+    });
 }
 
 function createCarouselItems(carouselId) {
@@ -217,14 +261,17 @@ function createCarouselItems(carouselId) {
     track.id = `track-${carouselId}`;
     
     carousel.items.forEach((item, index) => {
-        const itemElement = document.createElement('div');
-        itemElement.className = 'carousel-item';
-        itemElement.id = `item-${carouselId}-${index}`;
+    const itemElement = document.createElement('div');
+    itemElement.className = 'carousel-item';
+    itemElement.id = `item-${carouselId}-${index}`;
+    itemElement.setAttribute('role', 'group');
+    itemElement.setAttribute('aria-roledescription', 'slide');
+    itemElement.setAttribute('aria-label', `${index + 1} of ${carousel.items.length}`);
         
         let content = '';
         if (carouselId === 'companies') {
             content = `
-                <a href="${item.url}" target="_blank" class="card-link">
+                <a href="${item.url}" target="_blank" class="card-link" aria-label="${item.name} - ${item.locationType}">
                     <div class="content-card company-card">
                         <div class="company-logo">
                             <img src="${item.logo}" alt="${item.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -237,7 +284,17 @@ function createCarouselItems(carouselId) {
             `;
         } else if (carouselId === 'groups') {
             content = `
-                <a href="${item.url}" target="_blank" class="card-link">
+                <a href="${item.url}" target="_blank" class="card-link" aria-label="${item.name} - ${item.type}">
+                    <div class="content-card group-card">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                    </div>
+                    <div class="group-type-tag">${item.type}</div>
+                </a>
+            `;
+        } else if (carouselId === 'schools') {
+            content = `
+                <a href="${item.url}" target="_blank" class="card-link" aria-label="${item.name} - ${item.type}">
                     <div class="content-card group-card">
                         <h3>${item.name}</h3>
                         <p>${item.description}</p>
@@ -274,6 +331,7 @@ function updateCarousel(carouselId) {
         const leftmostVisible = carousel.currentIndex + 1;
         const rightmostVisible = Math.min(carousel.currentIndex + itemsPerView, carousel.items.length);
         indicator.textContent = `${leftmostVisible}-${rightmostVisible} / ${carousel.items.length}`;
+        indicator.setAttribute('aria-label', `Showing items ${leftmostVisible} to ${rightmostVisible} of ${carousel.items.length}`);
     }
 }
 
@@ -311,7 +369,8 @@ function stopAutoScroll(carouselId) {
 }
 
 function setupNavigation() {
-    const navButtons = document.querySelectorAll('.nav-btn');
+    // Only bind to section buttons, exclude the motion toggle
+    const navButtons = document.querySelectorAll('.nav-btn[data-section]');
     const sections = document.querySelectorAll('.scroll-section');
     
     navButtons.forEach((button) => {
@@ -323,71 +382,122 @@ function setupNavigation() {
             // Start transition
             isTransitioning = true;
             
-            // Move pyramid off-screen quickly
-            if (triangle) {
-                // Animate pyramid up and off-screen
-                const startY = triangle.position.y;
-                const targetY = 15; // Move way up off-screen
-                const duration = 300; // 300ms to move off-screen
-                const startTime = Date.now();
-                
-                function animatePyramidOut() {
-                    const elapsed = Date.now() - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
-                    const easeOut = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-                    
-                    triangle.position.y = startY + (targetY - startY) * easeOut;
-                    
-                    if (progress < 1) {
-                        requestAnimationFrame(animatePyramidOut);
-                    } else {
-                        // Pyramid is off-screen, now switch sections
-                        switchSections();
-                    }
+            // Update active button and aria-pressed immediately
+            navButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+            button.classList.add('active');
+            button.setAttribute('aria-pressed', 'true');
+            
+            // Get sections for transition
+            const currentActive = document.querySelector('.scroll-section.active');
+            const nextSection = sections[sectionIndex] || null;
+            
+            // Start both animations simultaneously if motion is enabled
+            if (shouldAnimate()) {
+                // Start pyramid animation
+                if (triangle) {
+                    startPyramidTransition();
                 }
-                animatePyramidOut();
+                
+                // Start section content transition
+                if (currentActive && nextSection && currentActive !== nextSection) {
+                    startSectionTransition(currentActive, nextSection);
+                } else {
+                    // No content animation needed, just activate section
+                    sections.forEach(section => section.classList.remove('active', 'entering', 'leaving'));
+                    if (nextSection) nextSection.classList.add('active');
+                }
+                
+                // Set transition completion
+                checkTransitionComplete();
             } else {
-                switchSections();
+                // Motion is off - just switch sections immediately
+                sections.forEach(section => section.classList.remove('active', 'entering', 'leaving'));
+                if (nextSection) nextSection.classList.add('active');
+                isTransitioning = false;
             }
             
-            function switchSections() {
-                // Update active button
-                navButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
+            // Manage carousel auto-scroll based on visibility
+            handleSectionChange(currentSectionIndex, sectionIndex);
+            currentSectionIndex = sectionIndex;
+            
+            function startPyramidTransition() {
+                // Animate pyramid up and off-screen, then back from bottom
+                const startY = triangle.position.y;
+                const offScreenY = 15; // Move way up off-screen
+                const finalY = originalTriangleY;
+                const phase1Duration = 300; // 300ms to move off-screen
+                const phase2Duration = 600; // 600ms to come back in
+                const phase2StartDelay = 400; // Start phase 2 when leaving section finishes (400ms)
+                const phase1StartTime = Date.now();
                 
-                // Update active section
-                sections.forEach(section => section.classList.remove('active'));
-                if (sections[sectionIndex]) {
-                    sections[sectionIndex].classList.add('active');
+                function animatePyramidPhase1() {
+                    const elapsed = Date.now() - phase1StartTime;
+                    const progress = Math.min(elapsed / phase1Duration, 1);
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    
+                    triangle.position.y = startY + (offScreenY - startY) * easeOut;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animatePyramidPhase1);
+                    }
                 }
                 
-                // Wait a moment, then bring pyramid back from bottom
+                // Start phase 2 after leaving section completes (400ms)
                 setTimeout(() => {
-                    if (triangle) {
-                        // Start pyramid from bottom of screen
-                        triangle.position.y = -15;
-                        const targetY = originalTriangleY;
-                        const duration = 600; // 600ms to come back in
-                        const startTime = Date.now();
+                    triangle.position.y = -15; // Start from bottom
+                    const phase2StartTime = Date.now();
+                    
+                    function animatePyramidPhase2() {
+                        const elapsed = Date.now() - phase2StartTime;
+                        const progress = Math.min(elapsed / phase2Duration, 1);
+                        const easeOut = 1 - Math.pow(1 - progress, 3);
                         
-                        function animatePyramidIn() {
-                            const elapsed = Date.now() - startTime;
-                            const progress = Math.min(elapsed / duration, 1);
-                            const easeOut = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-                            
-                            triangle.position.y = -15 + (targetY + 15) * easeOut;
-                            
-                            if (progress < 1) {
-                                requestAnimationFrame(animatePyramidIn);
-                            } else {
-                                isTransitioning = false; // Transition complete
-                            }
+                        triangle.position.y = -15 + (finalY + 15) * easeOut;
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animatePyramidPhase2);
                         }
-                        animatePyramidIn();
-                    } else {
-                        isTransitioning = false;
                     }
-                }, 100); // Small delay before bringing it back
+                    animatePyramidPhase2();
+                }, phase2StartDelay);
+                
+                animatePyramidPhase1();
+            }
+            
+            function startSectionTransition(currentActive, nextSection) {
+                console.log('Starting section transition:', currentActive.id, '→', nextSection.id);
+                
+                // Start leaving animation immediately
+                currentActive.classList.remove('active');
+                currentActive.classList.add('leaving');
+                console.log('Applied leaving to:', currentActive.id, 'classes:', currentActive.className);
+                
+                // Start entering section with animation class
+                nextSection.classList.add('entering', 'active');
+                console.log('Applied entering + active to:', nextSection.id, 'classes:', nextSection.className);
+
+                // Clean up leaving section after its animation finishes (400ms)
+                setTimeout(() => {
+                    currentActive.classList.remove('leaving');
+                    console.log('Cleaned up leaving from:', currentActive.id);
+                }, 400);
+                
+                // Clean up entering section after its animation finishes (600ms)
+                setTimeout(() => {
+                    nextSection.classList.remove('entering');
+                    console.log('Cleaned up entering from:', nextSection.id);
+                }, 600);
+            }
+            
+            function checkTransitionComplete() {
+                // End transition after both animations complete
+                // Longest duration is entering section (600ms) + small buffer
+                setTimeout(() => {
+                    isTransitioning = false;
+                }, 650);
             }
         });
     });
@@ -397,13 +507,17 @@ function animate() {
     requestAnimationFrame(animate);
     
     if (triangle) {
-        triangle.rotation.y += 0.005;
-        triangle.rotation.x += 0.002;
+        if (shouldAnimate()) {
+            triangle.rotation.y += 0.005;
+            triangle.rotation.x += 0.002;
+        }
     }
     
     if (particles) {
-        particles.rotation.y += 0.001;
-        particles.rotation.x += 0.0005;
+        if (shouldAnimate()) {
+            particles.rotation.y += 0.001;
+            particles.rotation.x += 0.0005;
+        }
     }
     
     if (renderer && scene && camera) {
@@ -416,5 +530,95 @@ function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+}
+
+// Motion helpers
+// No OS preference integration; user toggle only
+function prefersReducedMotion() { return false; }
+
+function loadMotionOverride() {
+    try {
+        const stored = localStorage.getItem('motionOverride');
+        if (stored === 'on' || stored === 'off') {
+            motionOverride = stored;
+        }
+    } catch (_) { /* ignore */ }
+}
+
+function saveMotionOverride() {
+    try {
+        localStorage.setItem('motionOverride', motionOverride);
+    } catch (_) { /* ignore */ }
+}
+
+function shouldAnimate() {
+    return motionOverride === 'on';
+}
+
+function setupMotionToggle() {
+    loadMotionOverride();
+    const btn = document.getElementById('motion-toggle');
+    if (!btn) return;
+
+    function renderState() {
+        // Icon and aria based on state
+        const icon = motionOverride === 'on' ? '✨' : '🚫';
+        const label = motionOverride === 'on' ? 'Motion: On' : 'Motion: Off';
+        btn.textContent = icon;
+        btn.setAttribute('aria-label', label);
+        btn.title = label;
+        btn.setAttribute('aria-pressed', motionOverride === 'on' ? 'true' : 'false');
+        // Reflect state on body to control CSS transitions
+        document.body.classList.toggle('motion-on', motionOverride === 'on');
+        document.body.classList.toggle('motion-off', motionOverride === 'off');
+    }
+
+    // Set initial body class state
+    renderState();
+
+    btn.addEventListener('click', () => {
+        // Toggle On <-> Off
+        motionOverride = motionOverride === 'on' ? 'off' : 'on';
+        saveMotionOverride();
+        renderState();
+
+        // Apply to carousels (auto-scroll)
+        Object.keys(autoScrollIntervals).forEach(id => stopAutoScroll(id));
+        Object.keys(carousels).forEach(id => {
+            if (shouldAnimate()) startAutoScroll(id);
+        });
+    });
+}
+
+// Stop/resume auto-scroll when sections change and ensure carousel DOM is ready
+function handleSectionChange(prevIndex, nextIndex) {
+    // Map section index to carousel IDs
+    const prevId = indexToCarouselId(prevIndex);
+    const nextId = indexToCarouselId(nextIndex);
+
+    if (prevId) {
+        stopAutoScroll(prevId);
+    }
+    if (nextId) {
+        ensureCarouselReady(nextId);
+        updateCarousel(nextId);
+        if (shouldAnimate()) startAutoScroll(nextId);
+    }
+}
+
+function indexToCarouselId(idx) {
+    if (idx === 2) return 'groups';
+    if (idx === 3) return 'schools';
+    if (idx === 4) return 'companies';
+    return null;
+}
+
+function ensureCarouselReady(carouselId) {
+    const container = document.getElementById(`${carouselId}-content`);
+    const track = document.getElementById(`track-${carouselId}`);
+    if (!track && container && carousels[carouselId]) {
+        // Rebuild items in case DOM was disrupted
+        createCarouselItems(carouselId);
     }
 }

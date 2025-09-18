@@ -1,28 +1,28 @@
 // Events data
 const events = [
     {
-        name: "Triangle Game Developers Meetup",
-        organizer: "Triangle Game Developers",
+        name: "Lorem Ipsum Developer Meetup",
+        organizer: "Lorem Ipsum Game Developers",
         date: "2025-10-15",
         time: "6:00 PM",
-        location: "American Underground, Durham",
-        description: "Monthly meetup for game developers in the Triangle area. Share your projects, network, and learn from others!"
+        location: "Lorem Building, Durham",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     },
     {
-        name: "Indie Game Showcase",
-        organizer: "NC Game Development Association",
+        name: "Consectetur Adipiscing Showcase",
+        organizer: "Lorem Development Association",
         date: "2025-11-20",
         time: "7:00 PM",
-        location: "Red Hat Amphitheater, Raleigh",
-        description: "Local indie developers showcase their latest games to the community."
+        location: "Ipsum Center, Raleigh",
+        description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     },
     {
-        name: "Game Jam Weekend",
-        organizer: "NC State Game Development Club",
+        name: "Dolor Sit Amet Weekend",
+        organizer: "Lorem University Club",
         date: "2025-12-05",
         time: "9:00 AM",
-        location: "NC State University, Raleigh",
-        description: "48-hour game development competition. Form teams and create amazing games!"
+        location: "Lorem University, Raleigh",
+        description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
     }
 ];
 
@@ -99,38 +99,49 @@ const companies = [
 // Groups and meetups
 const groups = [
     {
-        name: "Triangle Game Developers",
-        description: "The largest game development community in the Triangle area.",
+        name: "Lorem Ipsum Developers",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit in Triangle area.",
         location: "Various locations",
         type: "Meetup Group",
-        url: "https://www.meetup.com/trianglegamedev"
+        url: "https://www.example.com/lorem"
     },
     {
-        name: "NC Game Development Association",
-        description: "Statewide organization supporting game developers across North Carolina.",
+        name: "Consectetur Development Association",
+        description: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         location: "Statewide",
         type: "Professional Association",
-        url: "https://www.ncgameDevelopment.org"
+        url: "https://www.example.com/consectetur"
     },
     {
-        name: "Women in Games Triangle",
-        description: "Supporting women and underrepresented groups in game development.",
+        name: "People in Lorem Ipsum",
+        description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
         location: "Triangle Area",
         type: "Community Group",
-        url: "https://www.facebook.com/groups/WIGTriangle"
+        url: "https://www.example.com/women-lorem"
     },
     {
-        name: "Triangle VR/AR Meetup",
-        description: "Focused on virtual and augmented reality development and applications.",
+        name: "Triangle Lorem/Ipsum Meetup",
+        description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.",
         location: "Raleigh-Durham",
         type: "Technology Meetup",
-        url: "https://www.meetup.com/trianglevr"
+        url: "https://www.example.com/triangle-lorem"
     },
     {
-        name: "NC State Game Development Club",
-        description: "Student organization at NC State University for aspiring game developers.",
-        location: "NC State Campus",
+        name: "Lorem University Club",
+        description: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
+        location: "Lorem Campus",
         type: "Student Organization",
-        url: "https://www.ncsu.edu/gamedev"
+        url: "https://www.example.com/lorem-university"
+    }
+];
+
+// Schools and university programs
+const schools = [
+    {
+        name: "Wake Technical Community College – Simulation and Game Design",
+        description: "Associate degree program focusing on game design, programming, and interactive media development.",
+        location: "Wake Technical Community College",
+        type: "Community College Program",
+        url: "https://www.waketech.edu/programs-courses/credit/simulation-game-design"
     }
 ];

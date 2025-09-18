@@ -91,6 +91,47 @@ body {
     box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
 }
 
+/* Reflect aria-pressed state as active */
+.nav-btn[aria-pressed="true"] {
+    color: #38bdf8;
+    border-color: #38bdf8;
+    background: rgba(56, 189, 248, 0.15);
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+}
+
+/* Distinct style for Motion toggle so it doesn't look like other nav buttons */
+#motion-toggle {
+    min-width: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: 0;
+    transform: none;
+    box-shadow: none;
+    margin-left: 8px;
+}
+
+#motion-toggle:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: none;
+    box-shadow: none;
+}
+
+#motion-toggle[aria-pressed="true"] {
+    color: rgba(255, 255, 255, 0.95);
+    border-color: rgba(56, 189, 248, 0.35);
+    background: rgba(255, 255, 255, 0.10);
+    box-shadow: none;
+}
+
 .sections-container {
     position: fixed;
     top: 0;
@@ -112,9 +153,8 @@ body {
     justify-content: center;
     align-items: center;
     opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: auto;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none; /* non-active sections don’t capture input */
     padding: 30px 10px 120px 10px;
     z-index: 510;
     isolation: isolate;
@@ -122,7 +162,54 @@ body {
 
 .scroll-section.active {
     opacity: 1;
-    visibility: visible;
+    pointer-events: auto; /* active section is interactable */
+    z-index: 520; /* ensure entering section is on top for visible fade-in */
+}
+
+/* Cross-fade/zoom transitions when motion is ON */
+body.motion-on .scroll-section.entering {
+    z-index: 521 !important; /* above leaving */
+    animation: sectionFadeIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+    transition: none !important; /* override base transition */
+}
+
+/* Ensure entering animation takes precedence over active state */
+body.motion-on .scroll-section.active.entering {
+    animation: sectionFadeIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
+body.motion-on .scroll-section.leaving {
+    z-index: 520 !important;
+    pointer-events: none !important;
+    animation: sectionFadeOut 400ms cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+    transition: none !important; /* override base transition */
+}
+
+@keyframes sectionFadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(30px) scale(0.95); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+    }
+}
+
+@keyframes sectionFadeOut {
+    from { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+    }
+    to { 
+        opacity: 0; 
+        transform: translateY(-30px) scale(0.95); 
+    }
+}
+
+/* Disable section fades when motion is off */
+body.motion-off .scroll-section {
+    transition: none !important;
 }
 
 .intro-content {
@@ -333,7 +420,7 @@ body {
     width: 100%;
     transition: all 0.4s ease;
     position: relative;
-    overflow: visible;
+    overflow: hidden; /* ensure ::before top bar stays inside rounded corners */
     z-index: 100;
 }
 
@@ -476,6 +563,48 @@ body {
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Accessibility: focus styles */
+:focus {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 3px solid #38bdf8;
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+.carousel-nav:focus-visible,
+.nav-btn:focus-visible,
+.card-link:focus-visible {
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.6);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+    .event-card:hover,
+    .nav-btn:hover,
+    .carousel-nav:hover,
+    .content-card:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+}
+
+/* Utility: visually hidden (screen-reader only) */
+.visually-hidden {
+    position: absolute !important;
+    height: 1px; width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap; /* added line */
 }
 
 /* Mobile Responsive */
