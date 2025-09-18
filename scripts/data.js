@@ -8,11 +8,19 @@ function shuffleArray(array) {
     return shuffled;
 }
 
+// Utility function to parse dates as local instead of UTC
+function parseLocalDate(dateString) {
+    // Parse YYYY-MM-DD as local date instead of UTC
+    // This prevents timezone conversion issues
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day); // month is 0-indexed in Date constructor
+}
+
 // Utility function to sort events by date (most recent first)
 function sortEventsByDate(events) {
     return [...events].sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
+        const dateA = parseLocalDate(a.date);
+        const dateB = parseLocalDate(b.date);
         return dateA - dateB; // Ascending order (earliest first)
     });
 }
@@ -20,31 +28,76 @@ function sortEventsByDate(events) {
 // Events data - will be sorted by date
 const eventsData = [
     {
-        name: "Lorem Ipsum Developer Meetup",
-        organizer: "Lorem Ipsum Game Developers",
-        date: "2025-10-15",
-        time: "6:00 PM",
-        location: "Lorem Building, Durham",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        url: "https://www.example.com/lorem-meetup"
+        name: "Playtest Night",
+        organizer: "Triangle Interactive Arts Collective",
+        date: "2025-09-19",
+        time: "5:30 PM - 9:00 PM",
+        location: "800 Park Offices Drive, Suite 1011",
+        description: "Come out and playtest some games from local independent developers, or bring your project and show it to our open & supportive community!",
+        url: "https://triangleinteractivearts.org"
     },
     {
-        name: "Consectetur Adipiscing Showcase",
-        organizer: "Lorem Development Association",
-        date: "2025-11-20",
-        time: "7:00 PM",
-        location: "Ipsum Center, Raleigh",
-        description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-        url: "https://www.example.com/consectetur-showcase"
+        name: "Raleigh Unreal Engine Meetup",
+        organizer: "Raleigh Unreal Engine Meetup",
+        date: "2025-09-24",
+        time: "7:00 PM - 10:00 PM",
+        location: "1006 SW Maynard Rd, Cary, NC 27511",
+        description: "Hey all! We will be located at Fortnite Brewing in Cary for our monthly meetup! Feel free to bring any projects you are working on if you're interested in showing something, otherwise no need to bring anything!!",
+        url: "https://communities.unrealengine.com/events/details/epic-games-raleigh-presents-raleigh-unreal-engine-meetup-2025-09-24/"
     },
     {
-        name: "Dolor Sit Amet Weekend",
-        organizer: "Lorem University Club",
-        date: "2025-12-05",
-        time: "9:00 AM",
-        location: "Lorem University, Raleigh",
-        description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-        url: "https://www.example.com/dolor-weekend"
+        name: "Weekly Hangout",
+        organizer: "Triangle Interactive Arts Collective",
+        date: "2025-09-25",
+        time: "5:00 PM - 7:00 PM",
+        location: "800 Park Offices Drive, Suite 1011",
+        description: "Every Thursday we get together for our weekly hangout at our community office! We share our projects with each other, and play games! Enter through the front door, through the noisy lobby and straight ahead to the elevators. Our community office (1011) is on the right side of the elevators.",
+        url: "https://triangleinteractivearts.org"
+    },
+    {
+        name: "Weekly Hangout",
+        organizer: "Triangle Interactive Arts Collective",
+        date: "2025-10-02",
+        time: "5:00 PM - 7:00 PM",
+        location: "800 Park Offices Drive, Suite 1011",
+        description: "Every Thursday we get together for our weekly hangout at our community office! We share our projects with each other, and play games! Enter through the front door, through the noisy lobby and straight ahead to the elevators. Our community office (1011) is on the right side of the elevators.",
+        url: "https://triangleinteractivearts.org"
+    },
+    {
+        name: "Weekly Hangout",
+        organizer: "Triangle Interactive Arts Collective",
+        date: "2025-10-09",
+        time: "5:00 PM - 7:00 PM",
+        location: "800 Park Offices Drive, Suite 1011",
+        description: "Every Thursday we get together for our weekly hangout at our community office! We share our projects with each other, and play games! Enter through the front door, through the noisy lobby and straight ahead to the elevators. Our community office (1011) is on the right side of the elevators.",
+        url: "https://triangleinteractivearts.org"
+    },
+    {
+        name: "Weekly Hangout",
+        organizer: "Triangle Interactive Arts Collective",
+        date: "2025-10-16",
+        time: "5:00 PM - 7:00 PM",
+        location: "800 Park Offices Drive, Suite 1011",
+        description: "Every Thursday we get together for our weekly hangout at our community office! We share our projects with each other, and play games! Enter through the front door, through the noisy lobby and straight ahead to the elevators. Our community office (1011) is on the right side of the elevators.",
+        url: "https://triangleinteractivearts.org"
+    },
+    {
+        name: "Raleigh Unreal Engine Meetup",
+        organizer: "Raleigh Unreal Engine Meetup",
+        date: "2025-10-29",
+        time: "7:00 PM - 10:00 PM",
+        location: "1006 SW Maynard Rd, Cary, NC 27511",
+        description: "Hey all! We will be located at Fortnite Brewing in Cary for our monthly meetup! Feel free to bring any projects you are working on if you're interested in showing something, otherwise no need to bring anything!!",
+        url: "https://communities.unrealengine.com/events/details/epic-games-raleigh-presents-raleigh-unreal-engine-meetup-2025-10-29/"
+    },
+    {
+        name: "Raleigh Unreal Engine Meetup",
+        organizer: "Raleigh Unreal Engine Meetup",
+        date: "2025-11-26",
+        time: "7:00 PM - 10:00 PM",
+        location: "1006 SW Maynard Rd, Cary, NC 27511",
+        description: "Hey all! We will be located at Fortnite Brewing in Cary for our monthly meetup! Feel free to bring any projects you are working on if you're interested in showing something, otherwise no need to bring anything!!",
+        url: "https://communities.unrealengine.com/events/details/epic-games-raleigh-presents-raleigh-unreal-engine-meetup-2025-11-26/"
     }
 ];
 

@@ -1,3 +1,11 @@
+// Configuration constants
+const CONFIG = {
+    PARTICLE_COUNT: 100,
+    AUTO_SCROLL_INTERVAL: 4000, // 4 seconds
+    PYRAMID_SCALE: 2,
+    MONTHS_TO_SHOW: 3
+};
+
 // Global variables
 let scene, camera, renderer, triangle, particles;
 const carousels = {};
@@ -15,7 +23,7 @@ function getCarouselConfig(carouselId) {
     } else if (carouselId === 'groups') {
         return { itemsPerView: 3, percentagePerItem: 33.333 };
     } else {
-        return { itemsPerView: 4, percentagePerItem: 25 }; // events, schools
+        return { itemsPerView: 4, percentagePerItem: 25 }; // schools
     }
 }
 
@@ -70,7 +78,7 @@ function initThreeJS() {
     });
     
     triangle = new THREE.Mesh(geometry, material);
-    triangle.scale.set(2, 2, 2);
+    triangle.scale.set(CONFIG.PYRAMID_SCALE, CONFIG.PYRAMID_SCALE, CONFIG.PYRAMID_SCALE);
     originalTriangleY = triangle.position.y; // Store original position
     scene.add(triangle);
     
@@ -79,7 +87,7 @@ function initThreeJS() {
 }
 
 function createParticles() {
-    const particleCount = 100;
+    const particleCount = CONFIG.PARTICLE_COUNT;
     const positions = new Float32Array(particleCount * 3);
     
     for (let i = 0; i < particleCount * 3; i += 3) {
@@ -103,10 +111,10 @@ function createParticles() {
 }
 
 function populateContent() {
-    // Populate events
+    // Populate events with calendar view
     const eventsContent = document.getElementById('events-content');
     if (eventsContent && typeof events !== 'undefined') {
-        createEventsGrid(eventsContent);
+        createEventsCalendar(eventsContent);
     }
     
     // Populate groups
@@ -128,15 +136,233 @@ function populateContent() {
     }
 }
 
-function createEventsGrid(container) {
-    const grid = document.createElement('div');
-    grid.className = 'events-grid';
+function createEventsCalendar(container) {
+    const calendarWrapper = document.createElement('div');
+    calendarWrapper.className = 'calendar-wrapper';
     
-    events.forEach((event, index) => {
-        const eventCard = document.createElement('div');
-        eventCard.className = 'event-card';
+    // Get current date info
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    
+    // Create calendar for current month and next months
+    for (let i = 0; i < CONFIG.MONTHS_TO_SHOW; i++) {
+        const monthDate = new Date(currentYear, currentMonth + i, 1);
+        const monthCalendar = createMonthCalendar(monthDate, events);
+        calendarWrapper.appendChild(monthCalendar);
+    }
+    
+    container.appendChild(calendarWrapper);
+}
+
+function createMonthCalendar(monthDate, events) {
+    const monthContainer = document.createElement('div');
+    monthContainer.className = 'month-calendar';
+    
+    // Month header
+    const monthHeader = document.createElement('h3');
+    monthHeader.className = 'calendar-month-header';
+    monthHeader.textContent = monthDate.toLocaleDateString('en-US', { 
+        month: 'long', 
+        year: 'numeric' 
+    });
+    monthContainer.appendChild(monthHeader);
+    
+    // Days of week header
+    const daysHeader = document.createElement('div');
+    daysHeader.className = 'calendar-days-header';
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    dayNames.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'calendar-day-name';
+        dayElement.textContent = day;
+        daysHeader.appendChild(dayElement);
+    });
+    monthContainer.appendChild(daysHeader);
+    
+    // Calendar grid
+    const calendarGrid = document.createElement('div');
+    calendarGrid.className = 'calendar-grid';
+    
+    // Month names array
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    // Get month info
+    const year = monthDate.getFullYear();
+    const month = monthDate.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    // Filter events for this month
+    const monthEvents = events.filter(event => {
+        const eventDate = parseLocalDate(event.date);
+        return eventDate.getMonth() === month && eventDate.getFullYear() === year;
+    });
+    
+    // Create events lookup by date
+    const eventsByDate = {};
+    monthEvents.forEach(event => {
+        const eventDate = parseLocalDate(event.date);
+        const dateKey = eventDate.getDate();
+        if (!eventsByDate[dateKey]) {
+            eventsByDate[dateKey] = [];
+        }
+        eventsByDate[dateKey].push(event);
+    });
+    
+    // Empty cells for days before month starts
+    for (let i = 0; i < firstDay; i++) {
+        const emptyDay = document.createElement('div');
+        emptyDay.className = 'calendar-day empty';
+        calendarGrid.appendChild(emptyDay);
+    }
+    
+    // Days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'calendar-day';
         
-        const eventDate = new Date(event.date);
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'day-number';
+        dayNumber.textContent = day;
+        dayElement.appendChild(dayNumber);
+        
+        // Add events for this day
+        if (eventsByDate[day]) {
+            dayElement.classList.add('has-events');
+            const eventsContainer = document.createElement('div');
+            eventsContainer.className = 'day-events';
+            
+            // Add day click handler for multiple events
+            dayElement.addEventListener('click', (e) => {
+                // Show events popup for any click on the day (including dots)
+                showDayEventsPopup(eventsByDate[day], day, monthNames[month], year);
+            });
+
+            eventsByDate[day].forEach(event => {
+                const eventDot = document.createElement('div');
+                eventDot.className = 'event-dot';
+                eventDot.title = `${event.name} - ${event.time}`;
+                
+                // Event dots are just visual indicators - no click handlers
+                
+                eventsContainer.appendChild(eventDot);
+            });
+            
+            dayElement.appendChild(eventsContainer);
+        }
+        
+        calendarGrid.appendChild(dayElement);
+    }
+    
+    monthContainer.appendChild(calendarGrid);
+    return monthContainer;
+}
+
+// Show day events popup with carousel
+function showDayEventsPopup(dayEvents, day, monthName, year) {
+    // Hide the calendar
+    const calendarWrapper = document.querySelector('.calendar-wrapper');
+    if (calendarWrapper) {
+        calendarWrapper.classList.add('popup-open');
+    }
+    
+    // Create popup overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'event-popup-overlay';
+    
+    const popup = document.createElement('div');
+    popup.className = 'event-popup day-events-popup';
+    
+    const dayTitle = `${monthName} ${day}, ${year}`;
+    
+    // Determine if we need navigation (more than 1 event)
+    const showNavigation = dayEvents.length > 1;
+    
+    popup.innerHTML = `
+        <div class="popup-header">
+            <h4>Events on ${dayTitle}</h4>
+            <button class="popup-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="popup-content">
+            <div class="day-events-carousel" id="day-events-carousel">
+                <!-- Events will be inserted here -->
+            </div>
+            ${showNavigation ? `
+            <div class="carousel-navigation" id="day-events-nav">
+                <span class="carousel-indicator" id="day-events-indicator">1 of ${dayEvents.length}</span>
+            </div>
+            ` : ''}
+        </div>
+    `;
+    
+    // Add navigation arrows outside the popup if needed
+    if (showNavigation) {
+        const prevArrow = document.createElement('button');
+        prevArrow.className = 'carousel-nav prev';
+        prevArrow.id = 'day-events-prev';
+        prevArrow.setAttribute('aria-label', 'Previous event');
+        prevArrow.innerHTML = '‹';
+        
+        const nextArrow = document.createElement('button');
+        nextArrow.className = 'carousel-nav next';
+        nextArrow.id = 'day-events-next';
+        nextArrow.setAttribute('aria-label', 'Next event');
+        nextArrow.innerHTML = '›';
+        
+        overlay.appendChild(prevArrow);
+        overlay.appendChild(nextArrow);
+    }
+    
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+    
+    // Initialize the events carousel
+    const carouselContainer = popup.querySelector('#day-events-carousel');
+    createDayEventsCarousel(carouselContainer, dayEvents);
+    
+    // Function to close popup and show calendar
+    function closePopup() {
+        // Show the calendar again
+        if (calendarWrapper) {
+            calendarWrapper.classList.remove('popup-open');
+        }
+        document.body.removeChild(overlay);
+    }
+    
+    // Close handlers
+    const closeBtn = popup.querySelector('.popup-close');
+    closeBtn.addEventListener('click', closePopup);
+    
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closePopup();
+        }
+    });
+    
+    // ESC key handler
+    const escHandler = (e) => {
+        if (e.key === 'Escape') {
+            closePopup();
+            document.removeEventListener('keydown', escHandler);
+        }
+    };
+    document.addEventListener('keydown', escHandler);
+}
+
+// Create carousel for day events
+function createDayEventsCarousel(container, events) {
+    if (!events || events.length === 0) {
+        container.innerHTML = '<p>No events found for this day.</p>';
+        return;
+    }
+    
+    let currentIndex = 0;
+    
+    function renderCurrentEvent() {
+        const event = events[currentIndex];
+        const eventDate = parseLocalDate(event.date);
         const formattedDate = eventDate.toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',
@@ -144,21 +370,90 @@ function createEventsGrid(container) {
             day: 'numeric'
         });
         
-        eventCard.innerHTML = `
-            <h3><a href="${event.url}" target="_blank" class="event-title-link">${event.name}</a></h3>
-            <div class="event-organizer">Hosted by ${event.organizer}</div>
-            <div class="event-meta">
-                <span>📅 ${formattedDate}</span>
-                <span>🕐 ${event.time}</span>
-                <span>📍 ${event.location}</span>
+        const eventHTML = `
+            <div class="day-event-card">
+                <h5>${event.name}</h5>
+                <div class="popup-organizer">by ${event.organizer}</div>
+                <div class="popup-datetime">
+                    <span>📅 ${formattedDate}</span>
+                    <span>🕐 ${event.time}</span>
+                </div>
+                <div class="popup-location">📍 ${event.location}</div>
+                <div class="popup-description">${event.description}</div>
+                <a href="${event.url}" target="_blank" class="popup-link">View Event Details</a>
             </div>
-            <div class="event-description">${event.description}</div>
         `;
         
-        grid.appendChild(eventCard);
-    });
+        container.innerHTML = eventHTML;
+        
+        // Update indicator
+        const indicator = document.querySelector('#day-events-indicator');
+        if (indicator) {
+            indicator.textContent = `${currentIndex + 1} of ${events.length}`;
+        }
+        
+        // Update navigation buttons
+        const prevBtn = document.querySelector('#day-events-prev');
+        const nextBtn = document.querySelector('#day-events-next');
+        if (prevBtn) prevBtn.disabled = currentIndex === 0;
+        if (nextBtn) nextBtn.disabled = currentIndex === events.length - 1;
+    }
     
-    container.appendChild(grid);
+    // Navigation handlers
+    const prevBtn = document.querySelector('#day-events-prev');
+    const nextBtn = document.querySelector('#day-events-next');
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderCurrentEvent();
+            }
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < events.length - 1) {
+                currentIndex++;
+                renderCurrentEvent();
+            }
+        });
+    }
+    
+    // Keyboard navigation
+    const keyHandler = (e) => {
+        if (document.querySelector('.day-events-popup')) {
+            if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                currentIndex--;
+                renderCurrentEvent();
+            } else if (e.key === 'ArrowRight' && currentIndex < events.length - 1) {
+                currentIndex++;
+                renderCurrentEvent();
+            }
+        }
+    };
+    
+    document.addEventListener('keydown', keyHandler);
+    
+    // Clean up event listener when popup is closed
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'childList' && mutation.removedNodes.length > 0) {
+                for (let node of mutation.removedNodes) {
+                    if (node.classList && node.classList.contains('event-popup-overlay')) {
+                        document.removeEventListener('keydown', keyHandler);
+                        observer.disconnect();
+                        break;
+                    }
+                }
+            }
+        });
+    });
+    observer.observe(document.body, { childList: true });
+    
+    // Initial render
+    renderCurrentEvent();
 }
 
 function createHorizontalCarousel(container, items, carouselId) {
@@ -258,7 +553,6 @@ function createCarouselItems(carouselId) {
     const carouselElement = document.getElementById(`carousel-${carouselId}`);
     
     if (!carousel || !carouselElement) {
-        console.error(`Carousel not found: ${carouselId}`);
         return;
     }
     
@@ -382,7 +676,7 @@ function startAutoScroll(carouselId) {
     stopAutoScroll(carouselId);
     autoScrollIntervals[carouselId] = setInterval(() => {
         navigateCarousel(carouselId, 1);
-    }, 4000);
+    }, CONFIG.AUTO_SCROLL_INTERVAL);
 }
 
 function stopAutoScroll(carouselId) {
