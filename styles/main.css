@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -30,12 +32,14 @@ body {
     z-index: 2000;
 }
 
-.location-tag {
+/* Unified tag system - base styles shared by all tags */
+.location-tag,
+.group-type-tag,
+.school-type-tag {
     position: absolute;
-    bottom: 145px;
+    bottom: 90px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.9), rgba(37, 99, 235, 0.9));
     color: white;
     padding: 6px 16px;
     border-radius: 20px;
@@ -46,6 +50,29 @@ body {
     white-space: nowrap;
     z-index: 101;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.location-tag {
+    bottom: 100px;
+}
+
+.school-type-tag {
+    bottom: 100px;
+}
+
+/* Company location tag specific positioning */
+.location-tag {
+    bottom: 145px;
+}
+
+/* Group type tag styling */
+.group-type-tag {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.9), rgba(147, 51, 234, 0.9));
+}
+
+/* School type tag styling */
+.school-type-tag {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(22, 163, 74, 0.9));
 }
 
 .nav-content {
@@ -245,8 +272,9 @@ body.motion-off .scroll-section {
 }
 
 .intro-content h1 {
+    font-family: 'Space Grotesk', sans-serif;
     font-size: clamp(3rem, 8vw, 6rem);
-    font-weight: 900;
+    font-weight: 700;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -269,8 +297,9 @@ body.motion-off .scroll-section {
 }
 
 .scroll-section h2 {
+    font-family: 'Space Grotesk', sans-serif;
     font-size: clamp(2.5rem, 6vw, 4rem);
-    font-weight: 800;
+    font-weight: 600;
     text-align: center;
     margin-bottom: 50px;
     background: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%);
@@ -531,22 +560,16 @@ body.motion-off .scroll-section {
     cursor: pointer;
 }
 
-.group-type-tag {
-    position: absolute;
-    bottom: 60px;
-    left: 50%;
-    transform: translateX(-50%);
+.location-tag.headquarters {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(22, 163, 74, 0.9));
+}
+
+.location-tag.office {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.9), rgba(37, 99, 235, 0.9));
+}
+
+.location-tag.remote-staff {
     background: linear-gradient(135deg, rgba(168, 85, 247, 0.9), rgba(147, 51, 234, 0.9));
-    color: white;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    white-space: nowrap;
-    z-index: 101;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .content-card h3 {
@@ -814,16 +837,4 @@ body.motion-off .scroll-section {
 #companies-content .carousel-item {
     min-width: 20%;
     position: relative;
-}
-
-.location-tag.headquarters {
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(22, 163, 74, 0.9));
-}
-
-.location-tag.office {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.9), rgba(37, 99, 235, 0.9));
-}
-
-.location-tag.remote-staff {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.9), rgba(147, 51, 234, 0.9));
 }

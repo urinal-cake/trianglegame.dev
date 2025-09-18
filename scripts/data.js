@@ -102,6 +102,13 @@ const companies = [
 // Groups and meetups
 const groups = [
     {
+        name: "Triangle Area Supper Club (TASC)",
+        description: "A supper club for senior leaders and executives of game development in the Triangle area.",
+        location: "Triangle Area",
+        type: "Executive Network",
+        url: "https://tasc.games"
+    },
+    {
         name: "Lorem Ipsum Developers",
         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit in Triangle area.",
         location: "Various locations",

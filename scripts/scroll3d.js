@@ -297,7 +297,7 @@ function createCarouselItems(carouselId) {
                         <h3>${item.name}</h3>
                         <p>${item.description}</p>
                     </div>
-                    <div class="group-type-tag">${item.type}</div>
+                    <div class="school-type-tag">${item.type}</div>
                 </a>
             `;
         }
