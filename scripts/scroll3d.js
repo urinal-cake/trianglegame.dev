@@ -10,8 +10,6 @@ let currentSectionIndex = 0; // 0=intro, 1=events, 2=groups, 3=companies
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Page loaded, initializing...');
-    
     // Initialize Three.js
     initThreeJS();
     
@@ -468,27 +466,21 @@ function setupNavigation() {
             }
             
             function startSectionTransition(currentActive, nextSection) {
-                console.log('Starting section transition:', currentActive.id, '→', nextSection.id);
-                
                 // Start leaving animation immediately
                 currentActive.classList.remove('active');
                 currentActive.classList.add('leaving');
-                console.log('Applied leaving to:', currentActive.id, 'classes:', currentActive.className);
                 
                 // Start entering section with animation class
                 nextSection.classList.add('entering', 'active');
-                console.log('Applied entering + active to:', nextSection.id, 'classes:', nextSection.className);
 
                 // Clean up leaving section after its animation finishes (400ms)
                 setTimeout(() => {
                     currentActive.classList.remove('leaving');
-                    console.log('Cleaned up leaving from:', currentActive.id);
                 }, 400);
                 
                 // Clean up entering section after its animation finishes (600ms)
                 setTimeout(() => {
                     nextSection.classList.remove('entering');
-                    console.log('Cleaned up entering from:', nextSection.id);
                 }, 600);
             }
             
@@ -535,7 +527,6 @@ function onWindowResize() {
 
 // Motion helpers
 // No OS preference integration; user toggle only
-function prefersReducedMotion() { return false; }
 
 function loadMotionOverride() {
     try {

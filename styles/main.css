@@ -262,7 +262,7 @@ body.motion-off .scroll-section {
     margin-bottom: 40px;
 }
 
-#events-content, #groups-content, #companies-content {
+#events-content, #groups-content, #schools-content, #companies-content {
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
