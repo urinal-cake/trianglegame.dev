@@ -6,7 +6,18 @@ let isTransitioning = false;
 let originalTriangleY = 0;
 // motionOverride: 'on' | 'off' (default On)
 let motionOverride = 'on';
-let currentSectionIndex = 0; // 0=intro, 1=events, 2=groups, 3=companies
+let currentSectionIndex = 0; // 0=intro, 1=events, 2=groups, 3=schools, 4=companies
+
+// Utility functions
+function getCarouselConfig(carouselId) {
+    if (carouselId === 'companies') {
+        return { itemsPerView: 5, percentagePerItem: 20 };
+    } else if (carouselId === 'groups') {
+        return { itemsPerView: 3, percentagePerItem: 33.333 };
+    } else {
+        return { itemsPerView: 4, percentagePerItem: 25 }; // events, schools
+    }
+}
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
@@ -332,18 +343,17 @@ function updateCarousel(carouselId) {
     
     if (!carousel || !track) return;
     
-    // Determine items per view and percentage per item based on carousel type
-    const itemsPerView = carouselId === 'companies' ? 5 : 4;
-    const percentagePerItem = carouselId === 'companies' ? 20 : 25;
+    // Get carousel configuration
+    const config = getCarouselConfig(carouselId);
     
     // Move the track using translateX
-    const translateX = -carousel.currentIndex * percentagePerItem;
+    const translateX = -carousel.currentIndex * config.percentagePerItem;
     track.style.transform = `translateX(${translateX}%)`;
     
     // Update indicator - show the leftmost visible item number
     if (indicator) {
         const leftmostVisible = carousel.currentIndex + 1;
-        const rightmostVisible = Math.min(carousel.currentIndex + itemsPerView, carousel.items.length);
+        const rightmostVisible = Math.min(carousel.currentIndex + config.itemsPerView, carousel.items.length);
         indicator.textContent = `${leftmostVisible}-${rightmostVisible} / ${carousel.items.length}`;
         indicator.setAttribute('aria-label', `Showing items ${leftmostVisible} to ${rightmostVisible} of ${carousel.items.length}`);
     }
@@ -355,9 +365,9 @@ function navigateCarousel(carouselId, direction) {
     
     carousel.currentIndex += direction;
     
-    // Calculate the maximum index based on carousel type
-    const itemsPerView = carouselId === 'companies' ? 5 : 4;
-    const maxIndex = Math.max(0, carousel.items.length - itemsPerView);
+    // Get carousel configuration
+    const config = getCarouselConfig(carouselId);
+    const maxIndex = Math.max(0, carousel.items.length - config.itemsPerView);
     
     if (carousel.currentIndex > maxIndex) {
         carousel.currentIndex = 0; // Wrap to beginning

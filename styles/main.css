@@ -9,7 +9,7 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
     color: white;
     overflow: hidden;
@@ -155,7 +155,7 @@ body {
 .footer-credit {
     font-size: 11px;
     color: rgba(255, 255, 255, 0.4);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 400;
     pointer-events: auto;
 }
@@ -383,10 +383,6 @@ body.motion-off .scroll-section {
     width: 100%;
 }
 
-.event-card:hover {
-    cursor: pointer;
-}
-
 .event-organizer {
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.9rem;
@@ -510,14 +506,14 @@ body.motion-off .scroll-section {
     transition: opacity 0.3s ease;
 }
 
-.content-card:hover::before {
-    opacity: 1;
-}
-
 .content-card:hover {
     background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.25);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.content-card:hover::before {
+    opacity: 1;
 }
 
 /* Company card specific hover effect */
