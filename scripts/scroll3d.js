@@ -657,9 +657,10 @@ function createCarouselItems(carouselId) {
             `;
         } else if (carouselId === 'schools') {
             content = `
-                <a href="${escapeHtml(item.url || '#')}" target="_blank" class="card-link" aria-label="${escapeHtml(item.name || 'School')} - ${escapeHtml(item.type || 'School')}">
+                <a href="${escapeHtml(item.url || '#')}" target="_blank" class="card-link" aria-label="${escapeHtml(item.school || 'School')} - ${escapeHtml(item.name || 'Program')} - ${escapeHtml(item.type || 'School')}">
                     <div class="content-card group-card">
-                        <h3>${escapeHtml(item.name || 'Unknown School')}</h3>
+                        <h3>${escapeHtml(item.school || 'Unknown School')}</h3>
+                        <h4 class="program-name">${escapeHtml(item.name || 'Unknown Program')}</h4>
                         <p>${escapeHtml(item.description || 'No description available')}</p>
                         <div class="school-type-tag">${escapeHtml(item.type || 'School')}</div>
                     </div>
@@ -684,7 +685,7 @@ function updateCarousel(carouselId) {
     // Get carousel configuration
     const config = getCarouselConfig(carouselId);
     
-    // Move the track using transform3d to avoid blocking backdrop-filter
+    // Move the track using transform3d (now that isolation: isolate is removed from parent)
     const translateX = -carousel.currentIndex * config.percentagePerItem;
     track.style.transform = `translate3d(${translateX}%, 0, 0)`;
     track.style.marginLeft = ''; // Clear any previous margin-left

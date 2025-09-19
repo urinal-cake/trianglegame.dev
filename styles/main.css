@@ -195,7 +195,7 @@ body {
     pointer-events: none; /* non-active sections don’t capture input */
     padding: 100px 10px 40px 10px; /* Reduced top padding from 120px to 100px */
     z-index: 510;
-    isolation: isolate;
+    /* Don't use isolation: isolate - this blocks backdrop-filter on children */
     overflow-y: auto; /* Allow scrolling if content is too tall */
 }
 
@@ -839,29 +839,31 @@ body.motion-off .scroll-section {
 
 .horizontal-carousel {
     flex: 1;
-    min-height: 450px;
+    min-height: 400px; /* Reduced to match tighter carousel sizing */
     position: relative;
     overflow-x: hidden;
     overflow-y: visible;
     border-radius: 20px;
+    /* Apply backdrop-filter here so it covers the entire carousel viewport */
+    backdrop-filter: blur(5px);
 }
 
 .carousel-track {
     display: flex;
-    min-height: 450px;
+    min-height: 400px; /* Reduced from 450px to tighten around content */
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     /* Don't use isolation: isolate - this blocks backdrop-filter on children */
-    /* Use will-change to optimize without blocking backdrop-filter */
-    will-change: transform;
+    /* Don't use will-change: transform - this creates stacking context that blocks backdrop-filter */
+    /* backdrop-filter moved to .horizontal-carousel so it covers entire viewport */
 }
 
 .carousel-item {
     min-width: 25%; /* Default: 4 items per page (Events, Schools) */
-    min-height: 450px;
+    min-height: 400px; /* Reduced from 450px to match track */
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 0 10px; /* Only left/right padding, no top/bottom */
     opacity: 1;
     overflow: visible;
     position: relative;
@@ -870,7 +872,7 @@ body.motion-off .scroll-section {
 
 .content-card {
     background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(5px);
+    /* backdrop-filter moved to .carousel-track level where it works */
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
     padding: 25px;
@@ -954,6 +956,16 @@ body.motion-off .scroll-section {
     margin-bottom: 20px;
     font-size: 1.8rem;
     font-weight: 700;
+}
+
+/* Program name sub-header styling */
+.content-card .program-name {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 20px;
+    margin-top: -10px; /* Reduce space from main header */
+    font-size: 1.1rem;
+    font-weight: 500;
+    font-style: italic;
 }
 
 /* Special styling for Triangle Area Supper Club logo text */

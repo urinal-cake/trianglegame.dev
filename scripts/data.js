@@ -210,11 +210,20 @@ const groupsData = [
 // Schools and university programs - will be randomized
 const schoolsData = [
     {
-        name: "Wake Technical Community College – Simulation and Game Design",
-        description: "Associate degree program focusing on game design, programming, and interactive media development.",
+        name: "Simulation and Game Development",
+        school: "Wake Technical Community College",
+        description: "Associate in Applied Science degree providing broad background in simulation and video game industry. Includes practical training in 3D modeling, animation, design, programming, and project management using industry-standard software.",
         location: "Wake Technical Community College",
         type: "Community College Program",
-        url: "https://www.waketech.edu/programs-courses/credit/simulation-game-design"
+        url: "https://www.waketech.edu/programs-courses/credit/simulation-and-game-development"
+    },
+    {
+        name: "Computer Science - Game Development Concentration",
+        school: "North Carolina State University",
+        description: "Bachelor's degree concentration combining core Computer Science education with specialized game development coursework including Computer Graphics, Game Design and Development, and Advanced Game Projects.",
+        location: "NC State University",
+        type: "University Program",
+        url: "https://csc.ncsu.edu/academic-program/bachelor-of-science-in-computer-science-game-development-concentration/"
     }
 ];
 
