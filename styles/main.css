@@ -67,7 +67,7 @@ body {
     gap: 20px;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Made border more visible */
     border-radius: 20px;
     padding: 25px 40px;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
@@ -193,7 +193,7 @@ body {
     opacity: 0;
     transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none; /* non-active sections don’t capture input */
-    padding: 30px 10px 120px 10px;
+    padding: 100px 10px 120px 10px; /* Increased top padding to avoid nav overlap */
     z-index: 510;
     isolation: isolate;
 }
@@ -259,7 +259,7 @@ body.motion-off .scroll-section {
 
 .intro-content h1 {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(3rem, 8vw, 6rem);
+    font-size: clamp(3rem, 7vw, 5rem); /* Reduced max size and vw scaling */
     font-weight: 700;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
@@ -267,6 +267,8 @@ body.motion-off .scroll-section {
     background-clip: text;
     margin-bottom: 30px;
     text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    /* Prevent text from overlapping navigation */
+    margin-top: 80px;
 }
 
 .intro-content p {
@@ -285,7 +287,7 @@ body.motion-off .scroll-section {
 
 .scroll-section h2 {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-size: clamp(2.5rem, 5vw, 3.5rem); /* Reduced max size and vw scaling */
     font-weight: 600;
     text-align: center;
     margin-bottom: 50px;
@@ -294,6 +296,8 @@ body.motion-off .scroll-section {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     position: relative;
+    /* Ensure section headers don't overlap navigation */
+    margin-top: 80px;
 }
 
 .scroll-section h2::after {
@@ -846,7 +850,8 @@ body.motion-off .scroll-section {
 .carousel-track {
     display: flex;
     min-height: 450px;
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: margin-left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Remove isolation: isolate - this was blocking backdrop-filter on children */
 }
 
 .carousel-item {
@@ -864,7 +869,7 @@ body.motion-off .scroll-section {
 
 .content-card {
     background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
     padding: 25px;
@@ -873,7 +878,7 @@ body.motion-off .scroll-section {
     width: 100%;
     transition: all 0.4s ease;
     position: relative;
-    overflow: hidden; /* ensure ::before top bar stays inside rounded corners */
+    overflow: hidden;
     z-index: 100;
     display: flex;
     flex-direction: column;
@@ -1271,4 +1276,37 @@ body.motion-off .scroll-section {
 #groups-content .carousel-item {
     min-width: 33.333%;
     position: relative;
+}
+
+/* Large screen optimizations (for screens wider than 1600px) */
+@media (min-width: 1600px) {
+    .intro-content h1 {
+        font-size: clamp(3rem, 5vw, 4.5rem); /* Further limit scaling on very large screens */
+        margin-top: 100px; /* More space from nav on large screens */
+    }
+    
+    .scroll-section h2 {
+        font-size: clamp(2.5rem, 4vw, 3.2rem); /* Further limit scaling */
+        margin-top: 100px; /* More space from nav on large screens */
+    }
+    
+    .intro-content p {
+        font-size: clamp(1.2rem, 2vw, 1.6rem); /* Limit paragraph scaling */
+    }
+    
+    .scroll-section {
+        padding: 120px 20px 120px 20px; /* More padding on large screens */
+    }
+    
+    .nav-content {
+        border: 1px solid rgba(255, 255, 255, 0.25); /* Even more visible border */
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6); /* Stronger shadow */
+    }
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .nav-content {
+        border: 1px solid rgba(255, 255, 255, 0.3); /* More visible border on high DPI */
+    }
 }
