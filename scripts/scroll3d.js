@@ -684,9 +684,10 @@ function updateCarousel(carouselId) {
     // Get carousel configuration
     const config = getCarouselConfig(carouselId);
     
-    // Move the track using margin-left instead of transform to avoid blocking backdrop-filter
+    // Move the track using transform3d to avoid blocking backdrop-filter
     const translateX = -carousel.currentIndex * config.percentagePerItem;
-    track.style.marginLeft = `${translateX}%`;
+    track.style.transform = `translate3d(${translateX}%, 0, 0)`;
+    track.style.marginLeft = ''; // Clear any previous margin-left
     
     // Update indicator - show the leftmost visible item number
     if (indicator) {

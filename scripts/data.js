@@ -196,6 +196,14 @@ const groupsData = [
         type: "Developer Meetup",
         url: "https://communities.unrealengine.com/raleigh/",
         logo: "images/groups/RaleighUnrealMeetup.png"
+    },
+    {
+        name: "IGDA NC-Triangle",
+        description: "The NC-Triangle Chapter of the International Game Developers Association serves game developers in Raleigh, Durham, and Chapel Hill through networking, professional development, and advocacy.",
+        location: "Triangle Area",
+        type: "Professional Chapter",
+        url: "https://nc-triangle.igda.org",
+        logo: "images/groups/IGDA-NC.png"
     }
 ];
 

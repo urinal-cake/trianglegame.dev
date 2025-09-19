@@ -849,8 +849,10 @@ body.motion-off .scroll-section {
 .carousel-track {
     display: flex;
     min-height: 450px;
-    transition: margin-left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    /* Remove isolation: isolate - this was blocking backdrop-filter on children */
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Don't use isolation: isolate - this blocks backdrop-filter on children */
+    /* Use will-change to optimize without blocking backdrop-filter */
+    will-change: transform;
 }
 
 .carousel-item {
