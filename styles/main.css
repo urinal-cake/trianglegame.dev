@@ -188,14 +188,15 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* Changed from center to flex-start */
     align-items: center;
     opacity: 0;
     transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none; /* non-active sections don’t capture input */
-    padding: 100px 10px 120px 10px; /* Increased top padding to avoid nav overlap */
+    padding: 100px 10px 40px 10px; /* Reduced top padding from 120px to 100px */
     z-index: 510;
     isolation: isolate;
+    overflow-y: auto; /* Allow scrolling if content is too tall */
 }
 
 .scroll-section.active {
@@ -267,8 +268,7 @@ body.motion-off .scroll-section {
     background-clip: text;
     margin-bottom: 30px;
     text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    /* Prevent text from overlapping navigation */
-    margin-top: 80px;
+    margin-top: 70px; /* Increased from 40px to 70px */
 }
 
 .intro-content p {
@@ -290,14 +290,13 @@ body.motion-off .scroll-section {
     font-size: clamp(2.5rem, 5vw, 3.5rem); /* Reduced max size and vw scaling */
     font-weight: 600;
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 10px; /* Reduced from 25px to 10px */
     background: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     position: relative;
-    /* Ensure section headers don't overlap navigation */
-    margin-top: 80px;
+    margin-top: 70px; /* Increased from 40px to 70px */
 }
 
 .scroll-section h2::after {
@@ -1282,12 +1281,12 @@ body.motion-off .scroll-section {
 @media (min-width: 1600px) {
     .intro-content h1 {
         font-size: clamp(3rem, 5vw, 4.5rem); /* Further limit scaling on very large screens */
-        margin-top: 100px; /* More space from nav on large screens */
+        /* Removed margin-top since section now uses flex-start */
     }
     
     .scroll-section h2 {
         font-size: clamp(2.5rem, 4vw, 3.2rem); /* Further limit scaling */
-        margin-top: 100px; /* More space from nav on large screens */
+        /* Removed margin-top since section now uses flex-start */
     }
     
     .intro-content p {
@@ -1295,7 +1294,7 @@ body.motion-off .scroll-section {
     }
     
     .scroll-section {
-        padding: 120px 20px 120px 20px; /* More padding on large screens */
+        padding: 120px 20px 60px 20px; /* Reduced top padding from 140px to 120px */
     }
     
     .nav-content {
