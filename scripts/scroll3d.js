@@ -3,7 +3,12 @@ const CONFIG = {
     PARTICLE_COUNT: 100,
     AUTO_SCROLL_INTERVAL: 4000, // 4 seconds
     PYRAMID_SCALE: 2,
-    MONTHS_TO_SHOW: 3
+    MONTHS_TO_SHOW: 3,
+    // Animation timing constants
+    SECTION_LEAVE_DURATION: 400,  // ms for section leaving animation
+    SECTION_ENTER_DURATION: 600,  // ms for section entering animation
+    TRANSITION_BUFFER: 50,        // ms buffer for transition completion
+    PYRAMID_PHASE2_DELAY: 400     // ms delay before pyramid phase 2 starts
 };
 
 // Global variables
@@ -17,6 +22,12 @@ let motionOverride = 'on';
 let currentSectionIndex = 0; // 0=intro, 1=events, 2=groups, 3=schools, 4=companies
 
 // Utility functions
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 function getCarouselConfig(carouselId) {
     if (carouselId === 'companies') {
         return { itemsPerView: 5, percentagePerItem: 20 };
@@ -46,7 +57,34 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Handle window resize
     window.addEventListener('resize', onWindowResize);
+    
+    // Handle page unload for cleanup
+    window.addEventListener('beforeunload', cleanup);
 });
+
+function cleanup() {
+    // Clean up Three.js resources
+    if (renderer) {
+        renderer.dispose();
+    }
+    if (triangle && triangle.geometry) {
+        triangle.geometry.dispose();
+    }
+    if (triangle && triangle.material) {
+        triangle.material.dispose();
+    }
+    if (particles && particles.geometry) {
+        particles.geometry.dispose();
+    }
+    if (particles && particles.material) {
+        particles.material.dispose();
+    }
+    
+    // Stop all auto-scroll intervals
+    Object.values(autoScrollIntervals).forEach(interval => {
+        if (interval) clearInterval(interval);
+    });
+}
 
 function initThreeJS() {
     // Create scene
@@ -354,7 +392,7 @@ function showDayEventsPopup(dayEvents, day, monthName, year) {
 // Create carousel for day events
 function createDayEventsCarousel(container, events) {
     if (!events || events.length === 0) {
-        container.innerHTML = '<p>No events found for this day.</p>';
+        container.textContent = 'No events found for this day.';
         return;
     }
     
@@ -372,15 +410,15 @@ function createDayEventsCarousel(container, events) {
         
         const eventHTML = `
             <div class="day-event-card">
-                <h5>${event.name}</h5>
-                <div class="popup-organizer">by ${event.organizer}</div>
+                <h5>${escapeHtml(event.name || 'Untitled Event')}</h5>
+                <div class="popup-organizer">by ${escapeHtml(event.organizer || 'Unknown Organizer')}</div>
                 <div class="popup-datetime">
                     <span>📅 ${formattedDate}</span>
-                    <span>🕐 ${event.time}</span>
+                    <span>🕐 ${escapeHtml(event.time || 'Time TBD')}</span>
                 </div>
-                <div class="popup-location">📍 ${event.location}</div>
-                <div class="popup-description">${event.description}</div>
-                <a href="${event.url}" target="_blank" class="popup-link">View Event Details</a>
+                <div class="popup-location">📍 ${escapeHtml(event.location || 'Location TBD')}</div>
+                <div class="popup-description">${escapeHtml(event.description || 'No description available')}</div>
+                <a href="${escapeHtml(event.url || '#')}" target="_blank" class="popup-link">View Event Details</a>
             </div>
         `;
         
@@ -458,7 +496,10 @@ function createDayEventsCarousel(container, events) {
 
 function createHorizontalCarousel(container, items, carouselId) {
     if (!items || items.length === 0) {
-        container.innerHTML = '<p style="color: #ff6b6b;">No items to display</p>';
+        const errorMsg = document.createElement('p');
+        errorMsg.style.color = '#ff6b6b';
+        errorMsg.textContent = 'No items to display';
+        container.appendChild(errorMsg);
         return;
     }
     
@@ -573,22 +614,25 @@ function createCarouselItems(carouselId) {
         
         let content = '';
         if (carouselId === 'companies') {
+            const locationType = item.locationType || 'Unknown';
+            const locationClass = locationType.toLowerCase().replace(' ', '-');
             content = `
-                <a href="${item.url}" target="_blank" class="card-link" aria-label="${item.name} - ${item.locationType}">
+                <a href="${escapeHtml(item.url || '#')}" target="_blank" class="card-link" aria-label="${escapeHtml(item.name || 'Company')} - ${escapeHtml(locationType)}">
                     <div class="content-card company-card">
                         <div class="company-logo">
-                            <img src="${item.logo}" alt="${item.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <div class="logo-fallback" style="display:none;">${item.name.charAt(0)}</div>
+                            <img src="${escapeHtml(item.logo || '')}" alt="${escapeHtml(item.name || 'Company')}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="logo-fallback" style="display:none;">${escapeHtml((item.name || 'C').charAt(0))}</div>
                         </div>
-                        <h3>${item.name}</h3>
-                        <div class="location-tag ${item.locationType.toLowerCase().replace(' ', '-')}">${item.locationType}</div>
+                        <h3>${escapeHtml(item.name || 'Unknown Company')}</h3>
+                        <div class="location-tag ${escapeHtml(locationClass)}">${escapeHtml(locationType)}</div>
                     </div>
                 </a>
             `;
         } else if (carouselId === 'groups') {
             // Special handling for Triangle Area Supper Club and Triangle Interactive Arts Collective
-            const isTASC = item.name === "TASC";
-            const isTIAC = item.name === "Triangle Interactive";
+            const itemName = item.name || 'Unknown Group';
+            const isTASC = itemName === "TASC";
+            const isTIAC = itemName === "Triangle Interactive";
             let titleClass = "";
             if (isTASC) titleClass = "tasc-logo";
             if (isTIAC) titleClass = "tiac-logo";
@@ -596,28 +640,28 @@ function createCarouselItems(carouselId) {
             // Check if group has a logo
             const logoHtml = item.logo ? `
                 <div class="group-logo">
-                    <img src="${item.logo}" alt="${item.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <div class="logo-fallback" style="display:none;">${item.name.charAt(0)}</div>
+                    <img src="${escapeHtml(item.logo)}" alt="${escapeHtml(itemName)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="logo-fallback" style="display:none;">${escapeHtml(itemName.charAt(0))}</div>
                 </div>
             ` : '';
             
             content = `
-                <a href="${item.url}" target="_blank" class="card-link" aria-label="${item.name} - ${item.type}">
+                <a href="${escapeHtml(item.url || '#')}" target="_blank" class="card-link" aria-label="${escapeHtml(itemName)} - ${escapeHtml(item.type || 'Group')}">
                     <div class="content-card group-card">
                         ${logoHtml}
-                        <h3 class="${titleClass}">${item.name}</h3>
-                        <p>${item.description}</p>
-                        <div class="group-type-tag">${item.type}</div>
+                        <h3 class="${titleClass}">${escapeHtml(itemName)}</h3>
+                        <p>${escapeHtml(item.description || 'No description available')}</p>
+                        <div class="group-type-tag">${escapeHtml(item.type || 'Group')}</div>
                     </div>
                 </a>
             `;
         } else if (carouselId === 'schools') {
             content = `
-                <a href="${item.url}" target="_blank" class="card-link" aria-label="${item.name} - ${item.type}">
+                <a href="${escapeHtml(item.url || '#')}" target="_blank" class="card-link" aria-label="${escapeHtml(item.name || 'School')} - ${escapeHtml(item.type || 'School')}">
                     <div class="content-card group-card">
-                        <h3>${item.name}</h3>
-                        <p>${item.description}</p>
-                        <div class="school-type-tag">${item.type}</div>
+                        <h3>${escapeHtml(item.name || 'Unknown School')}</h3>
+                        <p>${escapeHtml(item.description || 'No description available')}</p>
+                        <div class="school-type-tag">${escapeHtml(item.type || 'School')}</div>
                     </div>
                 </a>
             `;
@@ -763,7 +807,7 @@ function setupNavigation() {
                     }
                 }
                 
-                // Start phase 2 after leaving section completes (400ms)
+                // Start phase 2 after leaving section completes
                 setTimeout(() => {
                     triangle.position.y = -15; // Start from bottom
                     const phase2StartTime = Date.now();
@@ -780,7 +824,7 @@ function setupNavigation() {
                         }
                     }
                     animatePyramidPhase2();
-                }, phase2StartDelay);
+                }, CONFIG.PYRAMID_PHASE2_DELAY);
                 
                 animatePyramidPhase1();
             }
@@ -793,23 +837,23 @@ function setupNavigation() {
                 // Start entering section with animation class
                 nextSection.classList.add('entering', 'active');
 
-                // Clean up leaving section after its animation finishes (400ms)
+                // Clean up leaving section after its animation finishes
                 setTimeout(() => {
                     currentActive.classList.remove('leaving');
-                }, 400);
+                }, CONFIG.SECTION_LEAVE_DURATION);
                 
-                // Clean up entering section after its animation finishes (600ms)
+                // Clean up entering section after its animation finishes
                 setTimeout(() => {
                     nextSection.classList.remove('entering');
-                }, 600);
+                }, CONFIG.SECTION_ENTER_DURATION);
             }
             
             function checkTransitionComplete() {
                 // End transition after both animations complete
-                // Longest duration is entering section (600ms) + small buffer
+                // Longest duration is entering section + small buffer
                 setTimeout(() => {
                     isTransitioning = false;
-                }, 650);
+                }, CONFIG.SECTION_ENTER_DURATION + CONFIG.TRANSITION_BUFFER);
             }
         });
     });
