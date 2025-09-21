@@ -29,6 +29,25 @@ function escapeHtml(text) {
 }
 
 function getCarouselConfig(carouselId) {
+    // Check screen size for responsive behavior
+    const screenWidth = window.innerWidth;
+    
+    // Very small screens (360px and below) - vertical layout, disable pagination
+    if (screenWidth <= 360) {
+        return { itemsPerView: 1, percentagePerItem: 0 }; // Disable transform movement
+    }
+    
+    // Mobile phones (480px and below) - 1 item per view
+    if (screenWidth <= 480) {
+        return { itemsPerView: 1, percentagePerItem: 100 };
+    }
+    
+    // Tablets (768px and below) - 2 items per view
+    if (screenWidth <= 768) {
+        return { itemsPerView: 2, percentagePerItem: 50 };
+    }
+    
+    // Desktop - original configurations
     if (carouselId === 'companies') {
         return { itemsPerView: 5, percentagePerItem: 20 };
     } else if (carouselId === 'groups') {
@@ -587,6 +606,9 @@ function createHorizontalCarousel(container, items, carouselId) {
             navigateCarousel(carouselId, 1);
         }
     });
+
+    // TODO: Touch/swipe navigation disabled temporarily to fix positioning issues
+    // Will re-implement with better logic
 }
 
 function createCarouselItems(carouselId) {
@@ -685,10 +707,17 @@ function updateCarousel(carouselId) {
     // Get carousel configuration
     const config = getCarouselConfig(carouselId);
     
-    // Move the track using transform3d (now that isolation: isolate is removed from parent)
-    const translateX = -carousel.currentIndex * config.percentagePerItem;
-    track.style.transform = `translate3d(${translateX}%, 0, 0)`;
-    track.style.marginLeft = ''; // Clear any previous margin-left
+    // Handle special case for very small screens with vertical layout
+    if (config.percentagePerItem === 0) {
+        // Don't move the track for vertical layout
+        track.style.transform = 'none';
+        track.style.marginLeft = '';
+    } else {
+        // Move the track using transform3d for horizontal layout
+        const translateX = -carousel.currentIndex * config.percentagePerItem;
+        track.style.transform = `translate3d(${translateX}%, 0, 0)`;
+        track.style.marginLeft = ''; // Clear any previous margin-left
+    }
     
     // Update indicator - show the leftmost visible item number
     if (indicator) {
@@ -889,6 +918,11 @@ function onWindowResize() {
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
+    
+    // Update all carousels when screen size changes for responsive behavior
+    Object.keys(carousels).forEach(carouselId => {
+        updateCarousel(carouselId);
+    });
 }
 
 // Motion helpers
@@ -979,3 +1013,44 @@ function ensureCarouselReady(carouselId) {
         createCarouselItems(carouselId);
     }
 }
+
+// Mobile Navigation Menu
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    
+    if (mobileToggle && mobileMenu) {
+        mobileToggle.addEventListener('click', function() {
+            const isActive = mobileToggle.classList.contains('active');
+            
+            if (isActive) {
+                mobileToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                mobileToggle.setAttribute('aria-expanded', 'false');
+            } else {
+                mobileToggle.classList.add('active');
+                mobileMenu.classList.add('active');
+                mobileToggle.setAttribute('aria-expanded', 'true');
+            }
+        });
+        
+        // Close menu when clicking a nav button
+        const mobileNavButtons = mobileMenu.querySelectorAll('.nav-btn');
+        mobileNavButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                mobileToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                mobileToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                mobileToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+});

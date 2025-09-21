@@ -145,6 +145,84 @@ body {
     box-shadow: none;
 }
 
+/* Mobile Navigation */
+.mobile-nav {
+    display: none; /* Hidden on desktop */
+}
+
+.mobile-menu-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2001;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle span {
+    width: 20px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 1px;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.mobile-menu {
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 20px;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 2000;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.mobile-menu.active {
+    display: flex;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .site-footer {
     position: fixed;
     bottom: 8px;
@@ -283,6 +361,18 @@ body.motion-off .scroll-section {
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
+}
+
+/* Events section specific styling - push calendar towards bottom */
+#events-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 70vh; /* Take up most of the viewport height */
+}
+
+#events-content .calendar-wrapper {
+    margin-top: auto; /* Push calendar to bottom */
+    margin-bottom: 20px; /* Some space from bottom edge */
 }
 
 .scroll-section h2 {
@@ -687,7 +777,7 @@ body.motion-off .scroll-section {
 /* Mobile Responsive for Calendar */
 @media (max-width: 768px) {
     .calendar-wrapper {
-        max-height: 45vh;
+        max-height: 60vh; /* Increased from 45vh to give calendar more space */
     }
     
     .month-calendar {
@@ -729,6 +819,44 @@ body.motion-off .scroll-section {
     .event-popup-overlay .carousel-nav {
         width: 45px;
         height: 45px;
+    }
+}
+
+/* Mobile navigation - show below 600px */
+@media (max-width: 600px) {
+    .nav-content {
+        display: none; /* Hide desktop nav */
+    }
+    
+    .mobile-nav {
+        display: block; /* Show mobile nav */
+    }
+    
+    .mobile-menu .nav-btn {
+        width: 100%;
+        padding: 16px 20px;
+        font-size: 16px;
+        min-width: auto;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 0;
+    }
+    
+    .mobile-menu .nav-btn:hover {
+        background: rgba(56, 189, 248, 0.2);
+        transform: none;
+    }
+    
+    .mobile-menu .nav-btn[aria-pressed="true"] {
+        background: rgba(56, 189, 248, 0.2);
+        border-color: rgba(56, 189, 248, 0.4);
+    }
+    
+    #motion-toggle-mobile {
+        border-radius: 12px !important;
+        width: 100% !important;
+        height: auto !important;
     }
 }
 
@@ -1160,6 +1288,7 @@ body.motion-off .scroll-section {
         width: 50px;
         height: 50px;
         font-size: 20px;
+        display: none !important; /* Hide arrows on tablets - use swipe instead */
     }
     
     .content-card {
@@ -1180,6 +1309,19 @@ body.motion-off .scroll-section {
     .meta-info {
         gap: 10px;
     }
+
+    /* Responsive carousel items - show 2 cards per page on tablets */
+    .carousel-item {
+        min-width: 50% !important; /* 2 items per page on tablets */
+    }
+    
+    #groups-content .carousel-item {
+        min-width: 50% !important; /* 2 items per page for groups on tablets */
+    }
+    
+    #companies-content .carousel-item {
+        min-width: 50% !important; /* 2 items per page for companies on tablets */
+    }
 }
 
 @media (max-width: 480px) {
@@ -1198,13 +1340,88 @@ body.motion-off .scroll-section {
         gap: 15px;
     }
     
+    /* Hide carousel navigation on mobile - use swipe instead */
+    .carousel-nav {
+        display: none !important;
+    }
+    
+    /* Make horizontal carousel take full width for better swipe area */
+    .horizontal-carousel {
+        min-height: 300px;
+        touch-action: pan-x; /* Enable horizontal touch scrolling */
+        overflow-x: auto; /* Allow horizontal scrolling as fallback */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+    
     .content-card {
         padding: 25px 20px;
+        max-width: none !important; /* Remove max-width constraint on mobile */
+        width: calc(100% - 20px) !important; /* Full width minus padding */
     }
     
     .meta-info {
         flex-direction: column;
         gap: 8px;
+    }
+
+    /* Responsive carousel items - show 1 card per page on mobile phones */
+    .carousel-item {
+        min-width: 100% !important; /* 1 item per page on mobile */
+    }
+    
+    #groups-content .carousel-item {
+        min-width: 100% !important; /* 1 item per page for groups on mobile */
+    }
+    
+    #companies-content .carousel-item {
+        min-width: 100% !important; /* 1 item per page for companies on mobile */
+    }
+    
+    /* Make horizontal carousel full width on mobile */
+    .horizontal-carousel {
+        min-height: 300px;
+    }
+}
+
+/* Extra small mobile screens - consider vertical layout */
+@media (max-width: 360px) {
+    .carousel-container {
+        flex-direction: column;
+        min-height: auto;
+        gap: 10px;
+    }
+    
+    .horizontal-carousel {
+        min-height: auto;
+        max-height: 400px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    
+    .carousel-track {
+        flex-direction: column;
+        min-height: auto;
+        transform: none !important; /* Disable horizontal transforms */
+    }
+    
+    .carousel-item {
+        min-width: 100%;
+        min-height: auto;
+        margin-bottom: 15px;
+    }
+    
+    .content-card {
+        min-height: 200px; /* Reduce card height for vertical stacking */
+    }
+    
+    /* Hide navigation arrows on very small screens with vertical layout */
+    .carousel-nav {
+        display: none;
+    }
+    
+    /* Hide indicators on vertical layout */
+    .indicator {
+        display: none;
     }
 }
 
@@ -1218,6 +1435,7 @@ body.motion-off .scroll-section {
     text-align: center;
     padding: 25px 15px;
     margin-bottom: 20px;
+    min-height: 300px; /* Ensure minimum height for company cards */
 }
 
 .company-logo {
@@ -1283,6 +1501,11 @@ body.motion-off .scroll-section {
 #companies-content .carousel-item {
     min-width: 20%;
     position: relative;
+    min-height: 400px; /* Ensure minimum height for company items */
+}
+
+#companies-content .horizontal-carousel {
+    min-height: 400px; /* Ensure carousel container has minimum height */
 }
 
 /* Groups carousel specific styling - 3 items per page for more space */
