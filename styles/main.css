@@ -2,11 +2,132 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400&display=swap');
 
+/* CSS Custom Properties - Design System */
+:root {
+    /* Font Scale - Progressive sizing system */
+    --font-scale-xs: 0.8rem;
+    --font-scale-sm: 0.85rem;
+    --font-scale-base: 1rem;
+    --font-scale-md: 1.1rem;
+    --font-scale-lg: 1.2rem;
+    --font-scale-xl: 1.3rem;
+    
+    /* Responsive font scaling with clamp() */
+    --font-intro-desktop: clamp(3rem, 7vw, 5rem);
+    --font-intro-mobile: clamp(2rem, 8vw, 4rem);
+    --font-intro-short: clamp(1.8rem, 5vw, 2.5rem);
+    
+    --font-heading-desktop: clamp(2.5rem, 5vw, 3.5rem);
+    --font-heading-mobile: clamp(1.5rem, 6vw, 3rem);
+    --font-heading-short: clamp(1.5rem, 3.5vw, 2rem);
+    
+    --font-body-desktop: clamp(1.2rem, 3vw, 1.8rem);
+    --font-body-mobile: clamp(1.1rem, 4vw, 1rem);
+    --font-body-short: clamp(0.9rem, 2vw, 1.1rem);
+    
+    /* Spacing scale */
+    --space-xs: 5px;
+    --space-sm: 10px;
+    --space-md: 15px;
+    --space-lg: 20px;
+    --space-xl: 30px;
+    --space-2xl: 40px;
+    --space-3xl: 60px;
+    
+    /* Logo and component sizes */
+    --logo-size-desktop: 90px;
+    --logo-size-tablet: 75px;
+    --logo-size-mobile: 60px;
+    
+    --calendar-height-desktop: 63px;
+    --calendar-height-tablet: 54px;
+    --calendar-height-mobile: 45px;
+    
+    /* Carousel heights */
+    --carousel-height-desktop: 400px;
+    --carousel-height-tablet: 360px;
+    --carousel-height-mobile: 320px;
+    
+    --card-height-desktop: 380px;
+    --card-height-tablet: 340px;
+    --card-height-mobile: 300px;
+}
+
+/* Responsive custom property updates */
+@media (max-width: 768px) {
+    :root {
+        --logo-size-desktop: var(--logo-size-tablet);
+        --calendar-height-desktop: var(--calendar-height-tablet);
+        --carousel-height-desktop: var(--carousel-height-tablet);
+        --card-height-desktop: var(--card-height-tablet);
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --logo-size-desktop: var(--logo-size-mobile);
+        --calendar-height-desktop: var(--calendar-height-mobile);
+        --carousel-height-desktop: var(--carousel-height-mobile);
+        --card-height-desktop: var(--card-height-mobile);
+        
+        --font-intro-desktop: var(--font-intro-mobile);
+        --font-heading-desktop: var(--font-heading-mobile);
+        --font-body-desktop: var(--font-body-mobile);
+    }
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
+/* Shared Utility Classes */
+.responsive-logo {
+    width: var(--logo-size-desktop);
+    height: var(--logo-size-desktop);
+    object-fit: contain;
+    border-radius: 8px;
+    border: none;
+}
+
+.responsive-font-small {
+    font-size: var(--font-scale-sm);
+    line-height: 1.4;
+}
+
+.responsive-font-base {
+    font-size: var(--font-scale-base);
+    line-height: 1.5;
+}
+
+.responsive-font-large {
+    font-size: var(--font-scale-lg);
+}
+
+.carousel-item-responsive {
+    min-height: var(--carousel-height-desktop);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--space-sm);
+}
+
+.content-card-responsive {
+    min-height: var(--card-height-desktop);
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-day-responsive {
+    min-height: var(--calendar-height-desktop);
+    height: var(--calendar-height-desktop);
+}
+
+.spacing-sm { margin: var(--space-sm); }
+.spacing-md { margin: var(--space-md); }
+.spacing-lg { margin: var(--space-lg); }
+.spacing-xl { margin: var(--space-xl); }
 
 body {
     font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -303,19 +424,19 @@ body.motion-off .scroll-section {
 
 .intro-content h1 {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(3rem, 7vw, 5rem); /* Reduced max size and vw scaling */
+    font-size: var(--font-intro-desktop);
     font-weight: 700;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 30px;
+    margin-bottom: var(--space-xl);
     text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     margin-top: 70px; /* Increased from 40px to 70px */
 }
 
 .intro-content p {
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-size: var(--font-body-desktop);
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.6;
     margin-bottom: 40px;
@@ -342,10 +463,10 @@ body.motion-off .scroll-section {
 
 .scroll-section h2 {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(2.5rem, 5vw, 3.5rem); /* Reduced max size and vw scaling */
+    font-size: var(--font-heading-desktop);
     font-weight: 600;
     text-align: center;
-    margin-bottom: 10px; /* Reduced from 25px to 10px */
+    margin-bottom: var(--space-sm); /* Reduced from 25px to 10px */
     background: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -877,15 +998,15 @@ body.motion-off .scroll-section {
 
 @media (max-width: 480px) {
     .scroll-section h2 {
-        font-size: clamp(1.5rem, 6vw, 3rem); /* Further reduced max size and vw scaling */
+        font-size: var(--font-heading-mobile);
     }
 
     .intro-content h1 {
-        font-size: clamp(2rem, 8vw, 4rem); /* Further reduced max size and vw scaling */
+        font-size: var(--font-intro-mobile);
     }
 
     .intro-content p {
-        font-size: clamp(1.1rem, 4vw, 1rem);
+        font-size: var(--font-body-mobile);
     }
 
     .calendar-wrapper {
@@ -1395,15 +1516,15 @@ body.motion-off .scroll-section {
 
     /* Responsive carousel items - show 2 cards per page on tablets */
     .carousel-item {
-        min-width: 50% !important; /* 2 items per page on tablets */
+        min-width: 50%; /* 2 items per page on tablets */
     }
     
     #groups-content .carousel-item {
-        min-width: 50% !important; /* 2 items per page for groups on tablets */
+        min-width: 50%; /* 2 items per page for groups on tablets */
     }
     
     #companies-content .carousel-item {
-        min-width: 50% !important; /* 2 items per page for companies on tablets */
+        min-width: 50%; /* 2 items per page for companies on tablets */
     }
     
     /* Smaller fonts for Groups, Schools, and Companies carousel cards on tablets */
@@ -1452,12 +1573,33 @@ body.motion-off .scroll-section {
         padding-top: 15px;
     }
     
+    .carousel-container {
+        min-height: 320px;
+        gap: 15px;
+        margin: 0;
+        padding: 5px;
+    }
+    
+    /* Hide carousel navigation on mid-range mobile - use swipe instead */
+    .carousel-nav {
+        display: none !important;
+    }
+    
+    .content-card {
+        max-width: none !important; /* Remove max-width constraint */
+        width: calc(100% - 20px) !important; /* Full width minus padding */
+    }
+
     /* Carousel items should show 1 card per page for mid-range mobile */
     .carousel-item {
         min-width: 100% !important; /* 1 item per page for mid-range mobile */
     }
     
     #groups-content .carousel-item {
+        min-width: 100% !important;
+    }
+    
+    #schools-content .carousel-item {
         min-width: 100% !important;
     }
     
@@ -1515,6 +1657,10 @@ body.motion-off .scroll-section {
     
     #groups-content .carousel-item {
         min-width: 100% !important; /* 1 item per page for groups on mobile */
+    }
+    
+    #schools-content .carousel-item {
+        min-width: 100% !important; /* 1 item per page for schools on mobile */
     }
     
     #companies-content .carousel-item {
