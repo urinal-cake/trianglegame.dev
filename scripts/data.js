@@ -204,6 +204,14 @@ const groupsData = [
         type: "Professional Chapter",
         url: "https://nc-triangle.igda.org",
         logo: "images/groups/IGDA-NC.png"
+    },
+    {
+        name: "GameDevDrinkUp Raleigh",
+        description: "A monthly DrinkUp for Game Developers bringing together industry professionals over tasty libations. No more waiting for GDC, E3 and PAX - we create regular opportunities for authentic industry discussions and networking.",
+        location: "Raleigh",
+        type: "Monthly Meetup",
+        url: "https://discord.gg/FWkscbmV",
+        logo: "images/groups/GDDU.png"
     }
 ];
 
