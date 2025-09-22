@@ -942,6 +942,37 @@ body.motion-off .scroll-section {
     .event-popup-overlay {
         padding: 10px;
     }
+    
+    /* Navigation and layout rules from second 480px block */
+    .nav-btn {
+        padding: 10px 15px;
+        font-size: 11px;
+        min-width: 80px;
+    }
+    
+    .scroll-section {
+        padding: 10px;
+    }
+    
+    .carousel-container {
+        min-height: 300px;
+        gap: 15px;
+        margin: 0;
+        padding: 5px;
+    }
+    
+    /* Hide carousel navigation on mobile - use swipe instead */
+    .carousel-nav {
+        display: none !important;
+    }
+    
+    /* Make horizontal carousel take full width for better swipe area */
+    .horizontal-carousel {
+        min-height: 300px;
+        touch-action: pan-x; /* Enable horizontal touch scrolling */
+        overflow-x: auto; /* Allow horizontal scrolling as fallback */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
 }
 
 /* Horizontal Carousel */
@@ -1490,9 +1521,49 @@ body.motion-off .scroll-section {
         min-width: 100% !important; /* 1 item per page for companies on mobile */
     }
     
-    /* Make horizontal carousel full width on mobile */
-    .horizontal-carousel {
-        min-height: 300px;
+    /* Smaller group logos on mobile to save vertical space */
+    .group-logo {
+        width: 90px !important;
+        height: 90px !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .group-logo img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .group-logo .logo-fallback {
+        font-size: 18px !important;
+    }
+    
+    /* Smaller fonts for Groups, Schools, and Companies carousel cards */
+    #groups-content .content-card h3,
+    #schools-content .content-card h3,
+    #companies-content .content-card h3 {
+        font-size: 1.1rem !important;
+    }
+    
+    #groups-content .content-card p,
+    #schools-content .content-card p,
+    #companies-content .content-card p {
+        font-size: 0.85rem !important;
+        line-height: 1.4 !important;
+    }
+    
+    #groups-content .content-card .program-name,
+    #schools-content .content-card .program-name,
+    #companies-content .content-card .program-name {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Reduce carousel heights by ~10% on mobile */
+    .carousel-item {
+        min-height: 320px !important; /* Further reduced for mobile */
+    }
+    
+    .content-card {
+        min-height: 300px !important; /* Further reduced for mobile */
     }
     
     /* Smaller group logos on mobile to save vertical space */
