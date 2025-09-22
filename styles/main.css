@@ -149,7 +149,7 @@ body {
 .hamburger {
     display: none;
     position: fixed;
-    top: 20px;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2001;
@@ -351,7 +351,7 @@ body.motion-off .scroll-section {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     position: relative;
-    margin-top: 70px; /* Increased from 40px to 70px */
+    margin-top: 50px;
 }
 
 .scroll-section h2::after {
@@ -372,7 +372,7 @@ body.motion-off .scroll-section {
     max-width: 1000px;
     margin: 0 auto;
     overflow-y: auto;
-    max-height: 50vh;
+    max-height: 65vh;
     padding-right: 10px;
     margin-top: 20px;
     transition: opacity 0.3s ease;
@@ -436,8 +436,8 @@ body.motion-off .scroll-section {
     justify-content: flex-start;
     transition: all 0.3s ease;
     position: relative;
-    min-height: 70px;
-    height: 70px;
+    min-height: 63px; /* Reduced from 70px (10% reduction) */
+    height: 63px;
 }
 
 .calendar-day.empty {
@@ -751,7 +751,7 @@ body.motion-off .scroll-section {
 /* Mobile Responsive for Calendar */
 @media (max-width: 768px) {
     .calendar-wrapper {
-        max-height: 60vh; /* Increased from 45vh to give calendar more space */
+        max-height: 60vh; /* Reduced from 60vh to prevent scrolling */
     }
     
     .month-calendar {
@@ -763,8 +763,8 @@ body.motion-off .scroll-section {
     }
     
     .calendar-day {
-        min-height: 60px;
-        height: 60px;
+        min-height: 54px; /* Reduced from 60px (10% reduction) */
+        height: 54px;
         padding: 3px;
     }
     
@@ -802,8 +802,11 @@ body.motion-off .scroll-section {
     }
 }
 
-/* Mobile Menu - Simple Approach */
 @media (max-width: 600px) {
+    .scroll-section h2 {
+        margin-top: 55px;
+    }
+
     .hamburger {
         display: flex;
     }
@@ -873,9 +876,25 @@ body.motion-off .scroll-section {
 }
 
 @media (max-width: 480px) {
+    .scroll-section h2 {
+        font-size: clamp(1.5rem, 6vw, 3rem); /* Further reduced max size and vw scaling */
+    }
+
+    .intro-content h1 {
+        font-size: clamp(2rem, 8vw, 4rem); /* Further reduced max size and vw scaling */
+    }
+
+    .intro-content p {
+        font-size: clamp(1.1rem, 4vw, 1rem);
+    }
+
+    .calendar-wrapper {
+        max-height: 60vh; /* Further reduced for mobile to prevent scrolling */
+    }
+
     .calendar-day {
-        min-height: 50px;
-        padding: 3px;
+        min-height: 45px; /* Reduced from 50px (10% reduction) */
+        padding: 2px; /* Reduced padding too */
     }
     
     .day-number {
@@ -1278,7 +1297,11 @@ body.motion-off .scroll-section {
 }
 
 /* Mobile Responsive */
-@media (max-width: 768px) {
+@media (max-width: 768px) and (min-width: 601px) {
+    .scroll-section h2 {
+        margin-top: 80px;
+    }
+
     .top-nav {
         top: 15px;
         left: 50%;
@@ -1351,6 +1374,65 @@ body.motion-off .scroll-section {
     #companies-content .carousel-item {
         min-width: 50% !important; /* 2 items per page for companies on tablets */
     }
+    
+    /* Smaller fonts for Groups, Schools, and Companies carousel cards on tablets */
+    #groups-content .content-card h3,
+    #schools-content .content-card h3,
+    #companies-content .content-card h3 {
+        font-size: 1.2rem !important;
+    }
+    
+    #groups-content .content-card p,
+    #schools-content .content-card p,
+    #companies-content .content-card p {
+        font-size: 0.9rem !important;
+        line-height: 1.4 !important;
+    }
+    
+    /* Slightly smaller group logos on tablets */
+    .group-logo {
+        width: 90px !important;
+        height: 90px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .group-logo img {
+        width: 75px !important;
+        height: 75px !important;
+    }
+    
+    .group-logo .logo-fallback {
+        font-size: 20px !important;
+    }
+    
+    /* Reduce carousel heights by ~10% on tablets */
+    .carousel-item {
+        min-height: 360px !important; /* ~10% reduction from 400px */
+    }
+    
+    .content-card {
+        min-height: 340px !important; /* ~10% reduction from 380px */
+    }
+}
+
+/* Between 600px and 480px - specific padding for mid-range mobile */
+@media (max-width: 600px) and (min-width: 481px) {
+    .scroll-section {
+        padding-top: 15px;
+    }
+    
+    /* Carousel items should show 1 card per page for mid-range mobile */
+    .carousel-item {
+        min-width: 100% !important; /* 1 item per page for mid-range mobile */
+    }
+    
+    #groups-content .carousel-item {
+        min-width: 100% !important;
+    }
+    
+    #companies-content .carousel-item {
+        min-width: 100% !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1361,12 +1443,14 @@ body.motion-off .scroll-section {
     }
     
     .scroll-section {
-        padding: 20px 15px;
+        padding: 10px;
     }
     
     .carousel-container {
         min-height: 300px;
         gap: 15px;
+        margin: 0;
+        padding: 5px;
     }
     
     /* Hide carousel navigation on mobile - use swipe instead */
@@ -1410,10 +1494,55 @@ body.motion-off .scroll-section {
     .horizontal-carousel {
         min-height: 300px;
     }
+    
+    /* Smaller group logos on mobile to save vertical space */
+    .group-logo {
+        width: 90px !important;
+        height: 90px !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .group-logo img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .group-logo .logo-fallback {
+        font-size: 18px !important;
+    }
+    
+    /* Smaller fonts for Groups, Schools, and Companies carousel cards */
+    #groups-content .content-card h3,
+    #schools-content .content-card h3,
+    #companies-content .content-card h3 {
+        font-size: 1.1rem !important;
+    }
+    
+    #groups-content .content-card p,
+    #schools-content .content-card p,
+    #companies-content .content-card p {
+        font-size: 0.85rem !important;
+        line-height: 1.4 !important;
+    }
+    
+    #groups-content .content-card .program-name,
+    #schools-content .content-card .program-name,
+    #companies-content .content-card .program-name {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Reduce carousel heights by ~10% on mobile */
+    .carousel-item {
+        min-height: 320px !important; /* Further reduced for mobile */
+    }
+    
+    .content-card {
+        min-height: 300px !important; /* Further reduced for mobile */
+    }
 }
 
 /* Extra small mobile screens - consider vertical layout */
-@media (max-width: 360px) {
+@media (max-width: 300px) {
     .carousel-container {
         flex-direction: column;
         min-height: auto;

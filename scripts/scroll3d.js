@@ -32,8 +32,8 @@ function getCarouselConfig(carouselId) {
     // Check screen size for responsive behavior
     const screenWidth = window.innerWidth;
     
-    // Very small screens (360px and below) - vertical layout, disable pagination
-    if (screenWidth <= 360) {
+    // Very small screens (300px and below) - vertical layout, disable pagination
+    if (screenWidth <= 300) {
         return { itemsPerView: 1, percentagePerItem: 0 }; // Disable transform movement
     }
     
