@@ -1448,6 +1448,14 @@ body.motion-off .scroll-section {
     white-space: nowrap; /* added line */
 }
 
+/* Medium screens - prevent company cards from getting squished */
+@media (max-width: 1200px) and (min-width: 769px) {
+    /* Companies carousel - show 4 items per page on medium screens */
+    #companies-content .carousel-item {
+        min-width: 25%; /* 4 items per page for medium screens */
+    }
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) and (min-width: 601px) {
     .scroll-section h2 {
@@ -1814,8 +1822,8 @@ body.motion-off .scroll-section {
 }
 
 .company-logo {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     margin-bottom: 15px;
     display: flex;
     align-items: center;
@@ -1840,8 +1848,8 @@ body.motion-off .scroll-section {
 }
 
 .company-logo img {
-    width: 45px;
-    height: 45px;
+    width: 35px;
+    height: 35px;
     object-fit: contain;
     border-radius: 8px;
 }
@@ -1855,7 +1863,7 @@ body.motion-off .scroll-section {
 }
 
 .logo-fallback {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
     color: rgba(56, 189, 248, 0.8);
 }
@@ -1874,7 +1882,7 @@ body.motion-off .scroll-section {
 
 /* Company carousel specific styling */
 #companies-content .carousel-item {
-    min-width: 20%;
+    min-width: 16.666%; /* Updated to match new 6 items per view */
     position: relative;
     min-height: 400px; /* Ensure minimum height for company items */
 }

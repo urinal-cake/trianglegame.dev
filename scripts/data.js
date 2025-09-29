@@ -112,7 +112,7 @@ const companiesData = [
     {
         name: "Red Storm Entertainment",
         logo: "https://www.ubisoft.com/favicon.ico",
-        locationType: "Office",
+        locationType: "Headquarters",
         url: "https://www.redstorm.com"
     },
     {
@@ -168,6 +168,146 @@ const companiesData = [
         logo: "https://www.blizzard.com/favicon.ico",
         locationType: "Remote Staff",
         url: "https://www.blizzard.com"
+    },
+    {
+        name: "Firaxis",
+        locationType: "Remote Staff",
+        url: "https://firaxis.com"
+    },
+    {
+        name: "Bungie",
+        locationType: "Remote Staff",
+        url: "https://www.bungie.net"
+    },
+    {
+        name: "Studio Hermitage",
+        locationType: "Headquarters",
+        url: "https://studiohermitage.com"
+    },
+    {
+        name: "Zapper Games",
+        locationType: "Headquarters",
+        url: "https://www.zappergames.com"
+    },
+    {
+        name: "Unknown Worlds",
+        locationType: "Remote Staff",
+        url: "https://unknownworlds.com"
+    },
+    {
+        name: "Notorious Studios",
+        locationType: "Remote Staff",
+        url: "https://notoriousstudios.com"
+    },
+    {
+        name: "Cold Iron Studios",
+        locationType: "Remote Staff",
+        url: "https://www.coldironstudios.com"
+    },
+    {
+        name: "Atomic Arcade",
+        locationType: "Headquarters",
+        url: "https://atomicarcade.com"
+    },
+    {
+        name: "Funcom",
+        locationType: "Office",
+        url: "https://www.funcom.com"
+    },
+    {
+        name: "Ubisoft",
+        locationType: "Office",
+        url: "https://www.ubisoft.com"
+    },
+    {
+        name: "Drastic Games",
+        locationType: "Headquarters",
+        url: "https://drasticgames.com"
+    },
+    {
+        name: "Imangi Studios",
+        locationType: "Headquarters",
+        url: "https://imangistudios.com"
+    },
+    {
+        name: "Infuse Studio",
+        locationType: "Headquarters",
+        url: "https://infusestudio.com"
+    },
+    {
+        name: "Limited Run Games",
+        locationType: "Headquarters",
+        url: "https://limitedrungames.com"
+    },
+    {
+        name: "Methodical Games",
+        locationType: "Headquarters",
+        url: "https://methodicalgames.com"
+    },
+    {
+        name: "Squanch Games",
+        locationType: "Office",
+        url: "https://squanchgames.com"
+    },
+    {
+        name: "Villain Games",
+        locationType: "Headquarters",
+        url: "https://villaingames.com"
+    },
+    {
+        name: "Katsu Entertainment",
+        locationType: "Headquarters",
+        url: "https://katsuent.com"
+    },
+    {
+        name: "Meta",
+        locationType: "Remote Staff",
+        url: "https://about.meta.com"
+    },
+    {
+        name: "Stoic",
+        locationType: "Remote Staff",
+        url: "https://stoicstudio.com"
+    },
+    {
+        name: "OtherSide Entertainment",
+        locationType: "Remote Staff",
+        url: "https://otherside-e.com"
+    },
+    {
+        name: "inXile Entertainment",
+        locationType: "Remote Staff",
+        url: "https://www.inxile-entertainment.com"
+    },
+    {
+        name: "Lost Boys Interactive",
+        locationType: "Remote Staff",
+        url: "https://www.lostboys.com"
+    },
+    {
+        name: "That's No Moon",
+        locationType: "Remote Staff",
+        url: "https://thatsno.moon"
+    },
+    {
+        name: "Teravision Games",
+        locationType: "Remote Staff",
+        url: "https://www.teravisiongames.com"
+    },
+    {
+        name: "Microsoft",
+        locationType: "Remote Staff",
+        url: "https://www.microsoft.com"
+    },
+    {
+        name: "High Voltage",
+        locationType: "Remote Staff",
+        url: "https://www.hvs.com"
+    },
+    {
+        name: "Happy Manic",
+        locationType: "Headquarters",
+        url: "https://happymanic.com"
     }
 ];
 

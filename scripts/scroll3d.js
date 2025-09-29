@@ -47,9 +47,20 @@ function getCarouselConfig(carouselId) {
         return { itemsPerView: 2, percentagePerItem: 50 };
     }
     
-    // Desktop - original configurations
+    // Medium screens (1200px and below) - prevent squishing
+    if (screenWidth <= 1200) {
+        if (carouselId === 'companies') {
+            return { itemsPerView: 4, percentagePerItem: 25 }; // 4 items for companies on medium screens
+        } else if (carouselId === 'groups') {
+            return { itemsPerView: 3, percentagePerItem: 33.333 };
+        } else {
+            return { itemsPerView: 4, percentagePerItem: 25 }; // schools
+        }
+    }
+    
+    // Desktop - original configurations for large screens
     if (carouselId === 'companies') {
-        return { itemsPerView: 5, percentagePerItem: 20 };
+        return { itemsPerView: 6, percentagePerItem: 16.666 }; // 6 items for companies on large screens
     } else if (carouselId === 'groups') {
         return { itemsPerView: 3, percentagePerItem: 33.333 };
     } else {
